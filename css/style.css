@@ -305,6 +305,11 @@ footer .copyright a:hover {
 	background:url("../images/cover.jpg");
 	background-size:cover;
 }
+
+.person-thumbnail__image{
+		background-image:url("../images/profile.jpg");
+		background-size:cover}
+
 @media handheld and (max-width:480px), screen and (max-device-width:480px), screen and (max-width:767px) {
 body {
 	padding:0;
