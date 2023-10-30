@@ -352,7 +352,11 @@ Esse teste supõe que as amostras são independentes, o que não é bem verdade,
 <p>
 Pra uma questão de facilidade nos cálculos, usar-se-á uma aproximação linear dessa possível função. O modelo da demanda no caso da regressão linear será:
 </p>
-<p><span class="math display">\[y_t = \beta_{0} + \beta_{1} t \]</span></p>
+<p><span class="math display">
+  
+  \[y_t = \beta_{0} + \beta_{1} t \]
+
+</span></p>
 <p>
 </p><p>A interpretação dos parâmetros <span class="math inline">\(\beta_{0}\)</span> e <span class="math inline">\(\beta_{1}\)</span> é bem intuitiva. Como o input é o ano, o <span class="math inline">\(\beta_{1}\)</span> é a variação da demanda ano a ano. No caso, não tem como saber exatamente como será o modelo do XGBoost e a vantagem dessa classe de modelos é exatamente essa. Por se tratar de uma regressão não paramétrica, ele encontrará, nos dados, a melhor forma de descrever essa tendência em função do tempo.</p>
 Criando uma função para automatizar o processo de data featuring para a tendência:
