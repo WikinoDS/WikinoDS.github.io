@@ -72,8 +72,7 @@
     <script>
       function load_html(book_name) {
         var file_name = "https://wikinods.github.io/projects/" + book_name.replaceAll(" ", "") 
-        console.log( file_name+"/qmd_file/")
-        console.log(file_name+'/qmd_file.html')
+
         var html = fetch(file_name+'/qmd_file.html').then(function (response) {                                                              
                                                               return response.text();
                                   }).then(function (html) {       
