@@ -5,6 +5,7 @@
 <head>
 <title>Wikino | Projetos</title>
 <meta charset="utf-8">
+<meta property="og:image" content="images/cover.jpg" />
 <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -23,8 +24,8 @@
 
 
 <!-- COVER SECTION !-->
-<section id="home-head" class="work">
-  <h1>Projetos</h1>
+<section id="home-head" class="cover">
+  <h1 id="page-name">Projetos</h1>
 </section>
 
 <!-- CONTENT SECTION !-->
@@ -37,12 +38,12 @@
     
 
     <div class="one-third first">
-      <div class="book-project">
-        <a href="contact.html">
+      <a onclick="load_html('Advanced Forecast with Python', 'projects/AdvancedForecastWithPython/qmd_file.html')"><div class="book-project">
           <img class="book-cover" src="images/AFWP_book_cover.jpg">
           <h3>Advanced Forecast With Python</h3>
-          <h2>With State-Of-The-Art-Models Including Lstms, Facebook's Prophet, and Amazon's DeepAr</h2></a>
-      </div>
+          <h2>With State-Of-The-Art-Models Including Lstms, Facebook's Prophet, and Amazon's DeepAr</h2>
+        </div>
+      </a>
     </div>
 
 
@@ -66,6 +67,25 @@
       </div>
     </div>
 
+    <div id="leituras_fodas"></div>
+
+    <script>
+      function load_html(book_name, file_name) {
+        var html = fetch(file_name).then(function (response) {                                                              
+                                                              return response.text();
+                                  }).then(function (html) {       
+                                                              document.getElementById("main-content").innerHTML = html                                               
+                                                              return html;
+                                  }).catch(function (err) {                                                              
+                                                              console.warn('Something went wrong.', err);
+                                  });        
+                
+
+          document.getElementById("page-name").innerHTML = book_name
+
+      } 
+
+    </script>
 
 
 
