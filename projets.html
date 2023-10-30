@@ -75,7 +75,7 @@
         var html = fetch("https://wikinods.github.io" + file_name).then(function (response) {                                                              
                                                               return response.text();
                                   }).then(function (html) {       
-                                                              document.getElementById("main-content").innerHTML = html.replaceAll("qmd_file/", "projects/"+book_name.replaceAll(' ', '')+"/qmd_file/")
+                                                              document.getElementById("main-content").innerHTML = html.replaceAll("qmd_file/", "https://wikinods.github.io/projects/"+book_name.replaceAll(' ', '')+"/qmd_file/")
                                                               
                                                               return html;
                                   }).catch(function (err) {                                                              
