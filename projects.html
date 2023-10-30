@@ -16,7 +16,7 @@
   <nav class="main-nav">
     <ul>
       <li><a href="index.html">Inicio</a></li>
-      <li><a href="projets.html" class="active">Projetos</a></li>
+      <li><a href="projects.html" class="active">Projetos</a></li>
       <li><a href="contact.html">Sobre</a></li>
     </ul>
   </nav>
@@ -38,7 +38,7 @@
     
 
     <div class="one-third first">
-      <a onclick="load_html('Advanced Forecast with Python', '/projects/AdvancedForecastWithPython/qmd_file.html')"><div class="book-project">
+      <a onclick="load_html('Advanced Forecast with Python')"><div class="book-project">
           <img class="book-cover" src="images/AFWP_book_cover.jpg">
           <h3>Advanced Forecast With Python</h3>
           <h2>With State-Of-The-Art-Models Including Lstms, Facebook's Prophet, and Amazon's DeepAr</h2>
@@ -70,12 +70,14 @@
     <div id="quarto-report"></div>
 
     <script>
-      function load_html(book_name, file_name) {
-        
-        var html = fetch("https://wikinods.github.io" + file_name).then(function (response) {                                                              
+      function load_html(book_name) {
+        var file_name = "https://wikinods.github.io/projects/" + book_name.replaceAll(" ", "") 
+        console.log( file_name+"/qmd_file/")
+        console.log(file_name+'/qmd_file.html')
+        var html = fetch(file_name+'/qmd_file.html').then(function (response) {                                                              
                                                               return response.text();
                                   }).then(function (html) {       
-                                                              document.getElementById("main-content").innerHTML = html.replaceAll("qmd_file/", "https://wikinods.github.io/projects/"+book_name.replaceAll(' ', '')+"/qmd_file/")
+                                                              document.getElementById("main-content").innerHTML = html.replaceAll("qmd_file/", file_name+"/qmd_file/")
                                                               
                                                               return html;
                                   }).catch(function (err) {                                                              
