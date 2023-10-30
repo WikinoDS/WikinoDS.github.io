@@ -72,7 +72,7 @@
     <script>
       function load_html(book_name, file_name) {
         var html = fetch(file_name).then(function (response) {                                                              
-                                                              return response.text();
+                                                              return response.text().replace("qmd_file/", "projects/AdvancedForecastWithPython/qmd_file/");
                                   }).then(function (html) {       
                                                               document.getElementById("main-content").innerHTML = html                                               
                                                               return html;
