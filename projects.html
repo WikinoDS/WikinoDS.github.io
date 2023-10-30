@@ -38,7 +38,7 @@
     
 
     <div class="one-third first">
-      <a onclick="load_html('Advanced Forecast with Python')"><div class="book-project">
+      <a onclick="load_html('Advanced Forecast With Python')"><div class="book-project">
           <img class="book-cover" src="images/AFWP_book_cover.jpg">
           <h3>Advanced Forecast With Python</h3>
           <h2>With State-Of-The-Art-Models Including Lstms, Facebook's Prophet, and Amazon's DeepAr</h2>
@@ -71,12 +71,15 @@
 
     <script>
       function load_html(book_name) {
-        var file_name = "https://github.com/WikinoDS/WikinoDS.github.io/blob/main/projects/" + book_name.replaceAll(" ", "") 
+        var root = "https://wikinods.github.io/projects/" + book_name.replaceAll(" ", "") 
+        
+        console.log(root+'/qmd_file.html')
+        console.log(root+'/qmd_file/')
 
-        var html = fetch(file_name+'/qmd_file.html').then(function (response) {                                                              
+        var html = fetch(root+'/qmd_file.html').then(function (response) {                                                              
                                                               return response.text();
                                   }).then(function (html) {       
-                                                              document.getElementById("main-content").innerHTML = html.replaceAll("qmd_file/", file_name+"/qmd_file/")
+                                                              document.getElementById("main-content").innerHTML = html.replaceAll("qmd_file/", root+"/qmd_file/")
                                                               
                                                               return html;
                                   }).catch(function (err) {                                                              
