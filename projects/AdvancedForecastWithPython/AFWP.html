@@ -2,7 +2,6 @@
 <html>
 
 <!-- TITLE SECTION !-->
-
 <head>
   <title>Wikino | Projetos</title>
   <meta charset="utf-8">
@@ -46,10 +45,11 @@
   <!-- JS SECTION -->
   <script>
     function load_html() {
-      var book_name = document.getElementById("page-name").innerText
-      var root = "https://wikinods.github.io/projects/" + book_name.replaceAll(" ", "");
-        
-      fetch(root + '/qmd_file.html')
+      var currentDir = window.location.href.split("/")
+      currentDir.pop()
+      currentDir = currentDir.toString().replaceAll(",", "/")
+
+      fetch(currentUrl + '/qmd_file.html')
             .then(function (response) {
                   if (response.ok) {
                                     return response.text();} 
