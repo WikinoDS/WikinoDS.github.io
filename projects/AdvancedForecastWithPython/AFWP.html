@@ -49,7 +49,7 @@
       currentDir.pop()
       currentDir = currentDir.toString().replaceAll(",", "/")
 
-      fetch(currentUrl + '/qmd_file.html')
+      fetch(currentDir + '/qmd_file.html')
             .then(function (response) {
                   if (response.ok) {
                                     return response.text();} 
