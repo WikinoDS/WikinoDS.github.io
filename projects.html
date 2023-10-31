@@ -14,7 +14,7 @@
 
 </head>
 
-<body>
+<body onload="get_projects()">
   <!-- HEADER SECTION !-->
   <header>
     <nav class="main-nav">
@@ -34,78 +34,76 @@
 
   <!-- CONTENT SECTION !-->
   <section id="main-content">
-    <div class="text-intro">
-      <h3>Leituras Comentadas:</h3>
+
+    <div id="project-block">
+      <!-- BLOCK NAME -->
+      <div class="text-intro">
+        <h3>_project_class_name_</h3>
+      </div>
+
+      <!-- BLOCK PROJECTS -->
+      <div class="columns features" id="projects-of-project-block">
+        
+        <div class="one-third" id="column-project">
+          <a href="./projects/_project_class_name_/_project_name_/index.html">
+            <div class="book-project">
+              <img class="book-cover" src="./projects/_project_class_name_/_project_name_/cover.jpg">
+              <h3 id="project-name">_project_name_</h3>            
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
 
-    <div class="columns features">
+
+    <script>
+        async function get_projects(){
+            const response = await fetch("https://api.github.com/repos/wikinoDS/WikinoDS.github.io/git/trees/main?recursive=1");
+            const data = await response.json();
+
+            var projects = {};
+            var html = document.createElement('div');
+
+            for (const tree of data["tree"]) {
+                const path = tree.path.split('/')
+
+                if (path[0] === "projects" && path.length == 2 && !projects.hasOwnProperty(path[1])) {
+                  projects[path[1]] = []
+                                                                                                      }
+                if (path[0] === "projects" && path.length > 2 && !projects[path[1]].hasOwnProperty(path[2])) {
+                  projects[path[1]].push(path[2])                                                                                                      }            
+                                            }
 
 
-      <div class="one-third first">
-        <a href="./projects/AdvancedForecastWithPython/AFWP.html">
-          <div class="book-project">
-            <img class="book-cover" src="images/AFWP_book_cover.jpg">
-            <h3>Advanced Forecast With Python</h3>
-            <h2>With State-Of-The-Art-Models Including Lstms, Facebook's Prophet, and Amazon's DeepAr</h2>
-          </div>
-        </a>
-      </div>
+            for (const project_class in projects) {
+              
+              var div_str = `<div id="project-block">
+                             <!-- BLOCK NAME -->
+                                <div class="text-intro">
+                                  <h3>_project_class_name_</h3>
+                                </div>
+                            `.replace('_project_class_name_', project_class + ":")
 
+              for (const project_name of projects[project_class]){
+                  var div_project = document.getElementById("projects-of-project-block").innerHTML                   
+                  console.log(div_project)
+                  div_project = div_project.replaceAll('_project_class_name_', project_class).replaceAll('_project_name_', project_name)           
+                  div_str = div_str + div_project
+               }
 
-      <div class="one-third">
-        <a onclick="load_html('Inventory Optimization')">
-          <div class="book-project">
-              <img class="book-cover" src="images/Inventory_optimization.jpg">
-              <h3>Inventory Optimization</h3>
-              <h2>Models & Simulations</h2>
-          </div>
-        </a>
-        
-      </div>
+              div_str = div_str + `
+              </div>` 
 
+              document.getElementById("main-content").innerHTML = div_str
+              
 
-      <div class="one-third">
-        <a onclick="load_html('Operations Management')">
-          <div class="book-project">
-              <img class="book-cover" src="images/operations_management.jpg">
-              <h3>Operations Management</h3>
-              <h2>Strategy and Analysis</h2>
-          </div>
-        </a>
-      </div>
+            }
+            
+              
 
-      <div id="quarto-report"></div>
+          }
 
-      <script>
-        function load_html(book_name) {
-          var root = "https://wikinods.github.io/projects/" + book_name.replaceAll(" ", "");
-          
-          fetch(root + '/qmd_file.html')
-                .then(function (response) {
-                                if (response.ok) {
-                                      return response.text();} 
-                                else {
-                                      throw new Error('Network response was not ok');
-                                           }
-                })
-
-                .then(function (html) {
-          
-                                var modifiedHTML = html.replaceAll("qmd_file/", root + "/qmd_file/");
-                                document.getElementById("main-content").innerHTML = modifiedHTML;
-
-                                 // Process MathJax equations after updating the content
-                                MathJax.typesetPromise().then(function () {
-                                          document.getElementById("page-name").innerHTML = book_name;
-                                                        });
-                                        })
-                .catch(function (err) {
-                                console.warn('Something went wrong:', err);
-                                      });
-        }
-
-
-      </script>
+    </script>
 
 
 
@@ -115,8 +113,7 @@
 
   <!-- FOOTER SECTION !-->
   <footer>
-    <div><small>by <a target="_blank" rel="nofollow" href="https://www.linkedin.com/in/vinicius-aquino-in/">Vinicius
-          Aquino</a>.</small></div>
+    <div><small>by <a target="_blank" rel="nofollow" href="https://www.linkedin.com/in/vinicius-aquino-in/">Vinicius Aquino</a>.</small></div>
   </footer>
 </body>
 
