@@ -81,7 +81,7 @@
       <script>
         function load_html(book_name) {
           var root = "https://wikinods.github.io/projects/" + book_name.replaceAll(" ", "");
-
+          
           fetch(root + '/qmd_file.html')
                 .then(function (response) {
                                 if (response.ok) {
@@ -92,7 +92,8 @@
                 })
 
                 .then(function (html) {
-                                var modifiedHTML = html.replace("/qmd_file", root + "/qmd_file/");
+          
+                                var modifiedHTML = html.replaceAll("qmd_file/", root + "/qmd_file/");
                                 document.getElementById("main-content").innerHTML = modifiedHTML;
 
                                  // Process MathJax equations after updating the content
