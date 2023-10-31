@@ -62,20 +62,20 @@
             const data = await response.json();
 
             var projects = {};
-            var html = document.createElement('div');
 
             for (const tree of data["tree"]) {
                 const path = tree.path.split('/')
 
-                if (path[0] === "projects" && path.length == 2 && !projects.hasOwnProperty(path[1])) {
+                if (path[0] === "projects" && path.length == 2 && !projects.hasOwnProperty(path[1])) {                  
                   projects[path[1]] = []
                                                                                                       }
-                if (path[0] === "projects" && path.length > 2 && !projects[path[1]].hasOwnProperty(path[2])) {
+                if (path[0] === "projects" && path.length > 2 && !projects[path[1]].includes(path[2])) {                  
                   projects[path[1]].push(path[2])                                                                                                      }            
                                             }
 
 
             for (const project_class in projects) {
+              
               
               var div_str = `<div id="project-block">
                              <!-- BLOCK NAME -->
@@ -84,9 +84,8 @@
                                 </div>
                             `.replace('_project_class_name_', project_class + ":")
 
-              for (const project_name of projects[project_class]){
-                  var div_project = document.getElementById("projects-of-project-block").innerHTML                   
-                  console.log(div_project)
+              for (const project_name of projects[project_class]){                  
+                  var div_project = document.getElementById("projects-of-project-block").innerHTML                                     
                   div_project = div_project.replaceAll('_project_class_name_', project_class).replaceAll('_project_name_', project_name)           
                   div_str = div_str + div_project
                }
@@ -95,8 +94,6 @@
               </div>` 
 
               document.getElementById("main-content").innerHTML = div_str
-              
-
             }
             
               
