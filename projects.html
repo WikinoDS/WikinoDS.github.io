@@ -73,6 +73,7 @@
                   projects[path[1]].push(path[2])                                                                                                      }            
                                             }
 
+            var div_main = ''        
 
             for (const project_class in projects) {
               
@@ -93,8 +94,10 @@
               div_str = div_str + `
               </div>` 
 
-              document.getElementById("main-content").innerHTML = div_str
+              div_main = div_main + div_str
             }
+
+            document.getElementById("main-content").innerHTML = div_main
             
               
 
