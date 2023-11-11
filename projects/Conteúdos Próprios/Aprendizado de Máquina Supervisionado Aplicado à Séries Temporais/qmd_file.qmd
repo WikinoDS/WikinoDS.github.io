@@ -1,0 +1,113 @@
+---
+title: "Aprendizado de Máquina Supervisionado Aplicado à Séries Temporais"
+format: html
+author: Vinicius Aquino
+---
+
+
+
+# Resumo
+
+<p></p>
+<br>
+
+# Aprendizado de Máquina Supervisionado
+
+<p>O Aprendizado de Máquina Supervisionado é essêncialmente o uso de modelos matemáticos e algoritimos para prever uma resposta <i>y</i> dado um vetor de variáveis $(x_1, x_2, ..., x_n)$, onde tais algoritimos e modelos são treinados a partir de uma amostra onde estas respostas <i>y</i> são previamente conhecidas. Em resumo, o cientista de dados tem um conjunto de dados com as devidas respostas e treina um modelo para aprender a variável alvo dele. A partir daí, aplica este modelo para prever em instâncias onde essa tal variável alvo é desconhecida.</p>
+<br>
+
+## Regressão 
+
+<p>Regressões são uma família de modelos de aprendizado de máquina supervisionado. Na verdade, como será abordado algumas extensões de modelos de regressão aqui, pode-se dizer que a linha que separa é um tanto nebulosa. A idéia de uma regressão é criar uma <i>função</i> que descreva uma certa <i>quantidade</i> de uma variável alvo. A imagem abaixo ajuda a entender:
+
+<br>
+![Regressão Generalizada](regressao.png "Title: Regressão"){}
+<br>
+
+O leitor mais leigo no assunto pode ter se assustado com essa forma de encarar uma regressão, mas explicar-se-á cada ponto:
+
+1 - Quantidade. Numa regressão, no geral, o interesse está no valor esperado de Y, dado X. Você provavelmente, mesmo sem saber, fez isso na regressão a vida toda. Agora, pode ser que você esteja interessado num quantil da sua variável Y. Pode ser que você esteja interessado numa razão de chances de um evento ocorrer. E assim sussecivamente. 
+
+2 - Função. A Função é a forma como os parâmetros e as variáveis preditoras estão relacionadas. Na regressão linear clássica que você estudou no primário, essa relação é dada por $\theta_0 +\theta_1 x$. 
+
+3 - Distribuição de Probabilidade. A essa altura do campeonato, eu espero, você não acredita que seu modelo descreve com 100% de acurácia a sua variável. Nesse caso, a Distribuição de Probabilidade é como a Função está probabilisticamente relacionada com Quantidade. No caso da regressão linear simples, têm-se $E(X|Y) ~ Normal(\theta_0 +\theta_1 x, \sigma²)$.
+
+4 - Preditoras. Essa são as variáveis de entrada no modelo. Elas podem ser quantitativas ou qualitativas.
+
+5 - Parâmetros. Estes são os valores a serem estimados. Aqui cabe uma ressalva que eventualmente se é mais regiroso com estes parâmetros, onde se faz mais suposições sobre ele. No caso da regressão linear, assume-se que eles tem distribuição normal, por exemplo. Em outros casos, a distribuição dele pode ser deixada de lado, é o caso das regressões não paramétricas.
+
+<br>
+![Regressão Linear na Forma Canônica](regressao_linear.png "Title: Regressão Linear"){}
+<br>
+
+No caso da Regressão Linear Simples, se tem:
+
+1 - O valor esperado de $Y$ condicionado as observações de $x$. 
+
+2 - Esse valor esperado é associaçado a função $\theta_0 +\theta_1 x$, também conhecida como canônica.
+
+3 - A função $\theta_0 +\theta_1 x$ vai representar o parâmetro $\mu$ da distribuião normal com $\sigma²$ independente de $x$.
+
+4 - A variável preditora pode ser tanto uma variável dummie ou uma quantitativa. 
+
+5 - O parâmetro $\theta_1$ pode ser interpretados como o incremento esperado em y com o incremento de +1 em $x$.
+
+Em resumo, Regressões são modelos matemáticos que associam uma variável preditora a uma quantidade de uma variável de interesse. Todas as vezes que o termo "Regressão" for usado, entenda isto: está sendo criado um modelo para uma quantidade de uma determinada variável a partir de variáveis regressoras conhecidas.
+
+E é claro que para se fazer isso, usa-se alguma métrica objetiva para se otimizar esse ajuste deste modelo. Estatísticos preferem o método de máxima-verossimilhança, onde parte-se de uma distribuição de probabilidade do modelo e encontram quais parâmetros fazem mais sentido a luz da amostra observada. Cientista de Dados vão usar métricas de erros como Erro Quadrático Médio, Erro Absoluto Médio, Erro Absoluto Percentual Médio etc. 
+</p>
+<br>
+
+### Linear vs Não Linear 
+
+<p>De forma bem grosseira, pode-se dizer que o "Linear" em Regressão Linear está muito mais ligado à Álgebra Linear do que a uma suposta "relação linear" entre as variáveis preditoras e a variável alvo. Uma Regressão é dita Linear se, e somente-se, apresenta linearidade nos seus parâmetros. E o que issi significa em termos práticos? Significa que as derivadas do modelo não podem ser <i>função de parâmetros</i>. Explico.
+
+Pensando novamente numa Regressão Linear Simples
+
+
+</p>
+
+
+
+
+
+
+
+
+
+Curiosamente, ás vezes alguns deste método são rigorosamente iguais. É o caso da Regressão Linear simples com resíduos normalmente distríbuidos: o método de máxima-verossimilhança e o método do Erro Quadrático Médio produzem os mesmos parâmetros. 
+
+Nós, estatísticos, usamos, no geral, funções de verossimilhança para 
+
+Nos modelos mais clássicos de regressão, usa-se a Soma dos Quadrado Ordinários dos Resíduos. isso é, este modelo 
+
+Entendido um pouco mais a fundo o que seria conceitualmente uma Regressão, agora é hora de entender os diferentes tipos de Regressão que existem.
+</p>
+<br>
+
+### Linear vs Não Linear 
+
+
+
+<p></p>
+<br>
+
+### Paramétrica vs Não Paramétrica 
+
+<p></p>
+<br>
+
+
+# Séries Temporais
+
+<p></p>
+<br>
+
+# Hands-on: Especificando Modelos
+
+<p></p>
+<br>
+
+# Deployment
+
+
