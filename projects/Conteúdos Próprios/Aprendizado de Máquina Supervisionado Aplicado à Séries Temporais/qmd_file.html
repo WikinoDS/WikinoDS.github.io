@@ -85,30 +85,102 @@ O Aprendizado de Máquina Supervisionado é essêncialmente o uso de modelos mat
 <p>
 </p><p>Regressões são uma família de modelos de aprendizado de máquina supervisionado. Na verdade, como será abordado algumas extensões de modelos de regressão aqui, pode-se dizer que a linha que separa é um tanto nebulosa. A idéia de uma regressão é criar uma <i>função</i> que descreva uma certa <i>quantidade</i> de uma variável alvo. A imagem abaixo ajuda a entender:</p>
 <p><br> <img src="regressao.png" title="Title: Regressão" class="img-fluid" alt="Regressão Generalizada"> <br></p>
-<p>Okay, o leitor mais leigo no assunto pode ter se assustado com essa forma de encarar uma regressão, mas explicar-se-á cada ponto:</p>
+<p>O leitor mais leigo no assunto pode ter se assustado com essa forma de encarar uma regressão, mas explicar-se-á cada ponto:</p>
 <p>1 - Quantidade. Numa regressão, no geral, o interesse está no valor esperado de Y, dado X. Você provavelmente, mesmo sem saber, fez isso na regressão a vida toda. Agora, pode ser que você esteja interessado num quantil da sua variável Y. Pode ser que você esteja interessado numa razão de chances de um evento ocorrer. E assim sussecivamente.</p>
 <p>2 - Função. A Função é a forma como os parâmetros e as variáveis preditoras estão relacionadas. Na regressão linear clássica que você estudou no primário, essa relação é dada por <span class="math inline">\(\theta_0 +\theta_1 x\)</span>.</p>
 <p>3 - Distribuição de Probabilidade. A essa altura do campeonato, eu espero, você não acredita que seu modelo descreve com 100% de acurácia a sua variável. Nesse caso, a Distribuição de Probabilidade é como a Função está probabilisticamente relacionada com Quantidade. No caso da regressão linear simples, têm-se <span class="math inline">\(E(X|Y) ~ Normal(\theta_0 +\theta_1 x, \sigma²)\)</span>.</p>
 <p>4 - Preditoras. Essa são as variáveis de entrada no modelo. Elas podem ser quantitativas ou qualitativas.</p>
 <p>5 - Parâmetros. Estes são os valores a serem estimados. Aqui cabe uma ressalva que eventualmente se é mais regiroso com estes parâmetros, onde se faz mais suposições sobre ele. No caso da regressão linear, assume-se que eles tem distribuição normal, por exemplo. Em outros casos, a distribuição dele pode ser deixada de lado, é o caso das regressões não paramétricas.</p>
+<p>Isso tudo fica mais fácil quando vizualizado concretamente. Aplicando essa estrutura ao modelo mais básico de regressões, a regressão linear simples, têm-se:</p>
 <p><br> <img src="regressao_linear.png" title="Title: Regressão Linear" class="img-fluid" alt="Regressão Linear na Forma Canônica"> <br></p>
-<p>No caso da Regressão Linear, se tem:</p>
+<p>E novamente:</p>
 <p>1 - O valor esperado de <span class="math inline">\(Y\)</span> condicionado as observações de <span class="math inline">\(x\)</span>.</p>
 <p>2 - Esse valor esperado é associaçado a função <span class="math inline">\(\theta_0 +\theta_1 x\)</span>, também conhecida como canônica.</p>
 <p>3 - A função <span class="math inline">\(\theta_0 +\theta_1 x\)</span> vai representar o parâmetro <span class="math inline">\(\mu\)</span> da distribuião normal com <span class="math inline">\(\sigma²\)</span> independente de <span class="math inline">\(x\)</span>.</p>
 <p>4 - A variável preditora pode ser tanto uma variável dummie ou uma quantitativa.</p>
 <p>5 - O parâmetro <span class="math inline">\(\theta_1\)</span> pode ser interpretados como o incremento esperado em y com o incremento de +1 em <span class="math inline">\(x\)</span>.</p>
-Entendido um pouco mais a fundo o que seria conceitualmente uma Regressão, agora é hora de entender os diferentes tipos de Regressão que existem.
+<p>Em resumo, Regressões são modelos matemáticos que associam uma variável preditora a uma quantidade de uma variável de interesse. Todas as vezes que o termo “Regressão” for usado, entenda isto: está sendo criado um modelo para uma quantidade de uma determinada variável a partir de determinadas covariáveis.</p>
+E é claro que para se fazer isso, usa-se alguma métrica objetiva para se otimizar esse ajuste deste modelo. Estatísticos preferem o método de máxima-verossimilhança, onde parte-se de uma distribuição de probabilidade do modelo e encontram quais parâmetros fazem mais sentido a luz da amostra observada. Cientista de Dados vão usar métricas de erros como Erro Quadrático Médio, Erro Absoluto Médio, Erro Absoluto Percentual Médio etc.
 <p></p>
 <p><br></p>
 <section id="linear-vs-não-linear" class="level3">
 <h3 class="anchored" data-anchor-id="linear-vs-não-linear">Linear vs Não Linear</h3>
 <p>
+De forma bem grosseira, pode-se dizer que o “Linear” em Regressão Linear está muito mais ligado à Álgebra Linear do que a uma suposta “relação linear” entre as variáveis preditoras e a variável alvo. Uma Regressão é dita Linear se, e somente-se, apresenta linearidade nos seus parâmetros. Em termos práticos, isso significa que as derivadas do modelo em relação aos parâmetros não podem ser <i>função de parâmetros</i>. Cito alguns exemplos abaixo.
 </p>
-<p><br></p>
+<p>
+</p><ul>
+<li>Regressão Linear Simples:</li>
+</ul>
+<p><span class="math display">\[y = \theta_0 + \theta_1 x \]</span></p>
+<p>A regressão linear simples é linear não porque forma uma reta, mas porque:</p>
+<p><span class="math display">\[\frac{d}{d\theta_0}(y) = \frac{d}{d\theta_0}(\theta_0 + \theta_1 x) = 1\]</span> <span class="math display">\[\frac{d}{d\theta_1}(y) = \frac{d}{d\theta_1}(\theta_0 + \theta_1 x) = x\]</span></p>
+Nenhuma das duas derivas são funções de parâmetros.
+<p></p>
+<p>
+</p><ul>
+<li>Modelo Polinomial Quadrático:</li>
+</ul>
+<p><span class="math display">\[y = \theta_0 + \theta_1 x + \theta_2 x²\]</span></p>
+<p>Nesse caso, o modelo não forma uma “reta”, mas ainda, sim, trata-se de uma regressão linear, dado que:</p>
+<p><span class="math display">\[\frac{d}{d\theta_0}(y) = \frac{d}{d\theta_0}(\theta_0 + \theta_1 x + \theta_2 x²) = 1\]</span> <span class="math display">\[\frac{d}{d\theta_1}(y) = \frac{d}{d\theta_1}(\theta_0 + \theta_1 x + \theta_2 x²) = x\]</span> <span class="math display">\[\frac{d}{d\theta_2}(y) = \frac{d}{d\theta_2}(\theta_0 + \theta_1 x + \theta_2 x²) = x²\]</span></p>
+Nenhuma derivada em relação ao parâmetro produz funções de parâmetros.
+<p></p>
+<p>
+</p><ul>
+<li>Modelo Michaelis-Menten:</li>
+</ul>
+<p><span class="math display">\[y = \frac{\theta_0 x}{\theta_1 + x}\]</span></p>
+<p>Derivando em função dos parâmetros:</p>
+<p><span class="math display">\[\frac{d}{d\theta_0}(y) = \frac{d}{d\theta_0}(\frac{\theta_0 x}{\theta_1 + x}) = \frac{x}{\theta_1 + x}\]</span> <span class="math display">\[\frac{d}{d\theta_1}(y) = \frac{d}{d\theta_1}(\frac{\theta_0 x}{\theta_1 + x}) = -\frac{\theta_0 x}{(\theta_1 + x)²}\]</span></p>
+Neste caso, as duas derivadas são funções de parâmetros e, portanto, trata-se de um modelo não linear.
+<p></p>
+<p>
+E, afinal, porque usar modelos não lineares? No geral, modelos não lineares estão associados a eventos mecanísticos e vindos de equações diferenciais. Estes modelos são muítissimos úteis na medida que permite estimar parâmetros teóricos, como é o caso do Modelo Michaelis-Manten citado acima, além disso a extrapolação no espaço das covariáveis é muito mais sucedida, na medida que estes parâmetros têm um embasamento teórico.
+</p>
 </section>
 <section id="paramétrica-vs-não-paramétrica" class="level3">
 <h3 class="anchored" data-anchor-id="paramétrica-vs-não-paramétrica">Paramétrica vs Não Paramétrica</h3>
+<p></p>
+<p>Regressões Não Paramétricas são regressões onde se faz pouca ou nenhuma suposição acerca do comportamento probablístico dos parâmetros. É aqui que reside a maior parte dos Modelos de Machine Learning e de suavização. Ao passo que numa Regressão Linear Simples, supõe-se que o parâmetro terá uma distribuição assintótica normal e pode-se fazer inúmeras inferências com estes parâmetros, aqui o mais importante é que os modelos finais descrevam os dados. Por não ter poucos ou nenhuma suposição acerca desses parâmetros, a regressão não paramétrica tem uma maior <i>robustez</i>, mas falha em ter bem definido uma distribuição de probabilidade dos seus erros. Nesse caso, é normal usar de simulações para definir seus intervalos de confiança.</p>
+São exemplos de regressões não paramétricas os modelos Gradient Boosting Decision Tree (XGBoost &amp; LightGBM), Random Forecast, KNN, Splines e etc.
+<p></p>
+<p><br></p>
+</section>
+</section>
+<section id="modelos" class="level2">
+<h2 class="anchored" data-anchor-id="modelos">Modelos</h2>
+<p>
+Entendido o que seria conceitualmente uma regressão, é hora de ir a fundo em algoritimos de machine learning em regressões a luz de toda teoria vista até aqui. Serão abordados, nesta linha
+</p>
+<section id="regressão-linear-simples" class="level3">
+<h3 class="anchored" data-anchor-id="regressão-linear-simples">Regressão Linear Simples</h3>
+<p>
+</p><p>Uma observação sempre pertinente sobre Regressão Linear é que existe essencialmente dois modelos diferentes que eventualmente podem ser o mesmo: existe a regressão linear como modelo matemático que minimiza quadrados ordinários e existe a regressão linear como modelo probabilístico que produz estimadores não enviesados de menor variância possível (BLUE). No escopo deste texto, aprendizado de máquina supervisionado, será visto o segundo modelo.</p>
+<p></p>
+</section>
+<section id="regressão-não-linear" class="level3">
+<h3 class="anchored" data-anchor-id="regressão-não-linear">Regressão Não Linear</h3>
+<p>
+</p>
+</section>
+<section id="k-nearest-neighbors-knn" class="level3">
+<h3 class="anchored" data-anchor-id="k-nearest-neighbors-knn">K-Nearest Neighbors (KNN)</h3>
+<p>
+</p>
+</section>
+<section id="árvores-de-decisão" class="level3">
+<h3 class="anchored" data-anchor-id="árvores-de-decisão">Árvores de Decisão</h3>
+<p>
+</p>
+</section>
+<section id="random-forest" class="level3">
+<h3 class="anchored" data-anchor-id="random-forest">Random Forest</h3>
+<p>
+</p>
+</section>
+<section id="gradient-boosting-based-tree" class="level3">
+<h3 class="anchored" data-anchor-id="gradient-boosting-based-tree">Gradient Boosting Based Tree</h3>
 <p>
 </p>
 <p><br></p>
@@ -119,7 +191,7 @@ Entendido um pouco mais a fundo o que seria conceitualmente uma Regressão, agor
 <h1>Séries Temporais</h1>
 <p>
 </p>
-<p>$$ <br></p>
+<p><br></p>
 </section>
 <section id="hands-on-especificando-modelos" class="level1">
 <h1>Hands-on: Especificando Modelos</h1>

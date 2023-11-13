@@ -36,11 +36,13 @@ O leitor mais leigo no assunto pode ter se assustado com essa forma de encarar u
 
 5 - Parâmetros. Estes são os valores a serem estimados. Aqui cabe uma ressalva que eventualmente se é mais regiroso com estes parâmetros, onde se faz mais suposições sobre ele. No caso da regressão linear, assume-se que eles tem distribuição normal, por exemplo. Em outros casos, a distribuição dele pode ser deixada de lado, é o caso das regressões não paramétricas.
 
+Isso tudo fica mais fácil quando vizualizado concretamente. Aplicando essa estrutura ao modelo mais básico de regressões, a regressão linear simples, têm-se:
+
 <br>
 ![Regressão Linear na Forma Canônica](regressao_linear.png "Title: Regressão Linear"){}
 <br>
 
-No caso da Regressão Linear Simples, se tem:
+E novamente:
 
 1 - O valor esperado de $Y$ condicionado as observações de $x$. 
 
@@ -52,7 +54,7 @@ No caso da Regressão Linear Simples, se tem:
 
 5 - O parâmetro $\theta_1$ pode ser interpretados como o incremento esperado em y com o incremento de +1 em $x$.
 
-Em resumo, Regressões são modelos matemáticos que associam uma variável preditora a uma quantidade de uma variável de interesse. Todas as vezes que o termo "Regressão" for usado, entenda isto: está sendo criado um modelo para uma quantidade de uma determinada variável a partir de variáveis regressoras conhecidas.
+Em resumo, Regressões são modelos matemáticos que associam uma variável preditora a uma quantidade de uma variável de interesse. Todas as vezes que o termo "Regressão" for usado, entenda isto: está sendo criado um modelo para uma quantidade de uma determinada variável a partir de determinadas covariáveis.
 
 E é claro que para se fazer isso, usa-se alguma métrica objetiva para se otimizar esse ajuste deste modelo. Estatísticos preferem o método de máxima-verossimilhança, onde parte-se de uma distribuição de probabilidade do modelo e encontram quais parâmetros fazem mais sentido a luz da amostra observada. Cientista de Dados vão usar métricas de erros como Erro Quadrático Médio, Erro Absoluto Médio, Erro Absoluto Percentual Médio etc. 
 </p>
@@ -60,42 +62,84 @@ E é claro que para se fazer isso, usa-se alguma métrica objetiva para se otimi
 
 ### Linear vs Não Linear 
 
-<p>De forma bem grosseira, pode-se dizer que o "Linear" em Regressão Linear está muito mais ligado à Álgebra Linear do que a uma suposta "relação linear" entre as variáveis preditoras e a variável alvo. Uma Regressão é dita Linear se, e somente-se, apresenta linearidade nos seus parâmetros. E o que issi significa em termos práticos? Significa que as derivadas do modelo não podem ser <i>função de parâmetros</i>. Explico.
+<p>De forma bem grosseira, pode-se dizer que o "Linear" em Regressão Linear está muito mais ligado à Álgebra Linear do que a uma suposta "relação linear" entre as variáveis preditoras e a variável alvo. Uma Regressão é dita Linear se, e somente-se, apresenta linearidade nos seus parâmetros. Em termos práticos, isso significa que as derivadas do modelo em relação aos parâmetros não podem ser <i>função de parâmetros</i>. Cito alguns exemplos abaixo.</p>
 
-Pensando novamente numa Regressão Linear Simples
+<p>- Regressão Linear Simples:
 
+$$y = \theta_0 + \theta_1 x $$
+
+A regressão linear simples é linear não porque forma uma reta, mas porque:
+
+$$\frac{d}{d\theta_0}(y) = \frac{d}{d\theta_0}(\theta_0 + \theta_1 x) = 1$$
+$$\frac{d}{d\theta_1}(y) = \frac{d}{d\theta_1}(\theta_0 + \theta_1 x) = x$$
+
+Nenhuma das duas derivas são funções de parâmetros.</p>
+
+<p>- Modelo Polinomial Quadrático:
+
+$$y = \theta_0 + \theta_1 x + \theta_2 x²$$
+
+Nesse caso, o modelo não forma uma "reta", mas ainda, sim, trata-se de uma regressão linear, dado que:
+
+$$\frac{d}{d\theta_0}(y) = \frac{d}{d\theta_0}(\theta_0 + \theta_1 x + \theta_2 x²) = 1$$
+$$\frac{d}{d\theta_1}(y) = \frac{d}{d\theta_1}(\theta_0 + \theta_1 x + \theta_2 x²) = x$$
+$$\frac{d}{d\theta_2}(y) = \frac{d}{d\theta_2}(\theta_0 + \theta_1 x + \theta_2 x²) = x²$$
+
+Nenhuma derivada em relação ao parâmetro produz funções de parâmetros. </p>
+
+<p>- Modelo Michaelis-Menten:
+
+$$y = \frac{\theta_0 x}{\theta_1 + x}$$
+
+Derivando em função dos parâmetros:
+
+$$\frac{d}{d\theta_0}(y) = \frac{d}{d\theta_0}(\frac{\theta_0 x}{\theta_1 + x}) = \frac{x}{\theta_1 + x}$$
+$$\frac{d}{d\theta_1}(y) = \frac{d}{d\theta_1}(\frac{\theta_0 x}{\theta_1 + x}) = -\frac{\theta_0 x}{(\theta_1 + x)²}$$
+
+Neste caso, as duas derivadas são funções de parâmetros e, portanto, trata-se de um modelo não linear.</p>
+
+<p>E, afinal, porque usar modelos não lineares? No geral, modelos não lineares estão associados a eventos mecanísticos e vindos de equações diferenciais. Estes modelos são muítissimos úteis na medida que permite estimar parâmetros teóricos, como é o caso do Modelo Michaelis-Manten citado acima, além disso a extrapolação no espaço das covariáveis é muito mais sucedida, na medida que estes parâmetros têm um embasamento teórico.</p>
+
+### Paramétrica vs Não Paramétrica
+
+</p>
+Regressões Não Paramétricas são regressões onde se faz pouca ou nenhuma suposição acerca do comportamento probablístico dos parâmetros. É aqui que reside a maior parte dos Modelos de Machine Learning e de suavização. Ao passo que numa Regressão Linear Simples, supõe-se que o parâmetro terá uma distribuição assintótica normal e pode-se fazer inúmeras inferências com estes parâmetros, aqui o mais importante é que os modelos finais descrevam os dados. Por não ter poucos ou nenhuma suposição acerca desses parâmetros, a regressão não paramétrica tem uma maior <i>robustez</i>, mas falha em ter bem definido uma distribuição de probabilidade dos seus erros. Nesse caso, é normal usar de simulações para definir seus intervalos de confiança.
+
+
+São exemplos de regressões não paramétricas os modelos Gradient Boosting Decision Tree (XGBoost & LightGBM), Random Forecast, KNN, Splines e etc. 
+</p>
+
+<br>
+
+## Modelos
+<p>Entendido o que seria conceitualmente uma regressão, é hora de ir a fundo em algoritimos de machine learning em regressões a luz de toda teoria vista até aqui. Serão abordados, nesta linha </p>
+
+
+### Regressão Linear Simples
+<p>Uma observação sempre pertinente sobre Regressão Linear é que existe essencialmente dois modelos diferentes que eventualmente podem ser o mesmo: existe a regressão linear como modelo matemático que minimiza quadrados ordinários e existe a regressão linear como modelo probabilístico que produz estimadores não enviesados de menor variância possível (BLUE). No escopo deste texto, aprendizado de máquina supervisionado, será visto o segundo modelo. 
 
 </p>
 
+### Regressão Não Linear
+<p> </p>
 
 
+### K-Nearest Neighbors (KNN)
+<p> </p>
+
+### Árvores de Decisão
+<p> </p>
 
 
+### Random Forest
+<p> </p>
+
+### Gradient Boosting Based Tree
+<p> </p>
 
 
-
-
-Curiosamente, ás vezes alguns deste método são rigorosamente iguais. É o caso da Regressão Linear simples com resíduos normalmente distríbuidos: o método de máxima-verossimilhança e o método do Erro Quadrático Médio produzem os mesmos parâmetros. 
-
-Nós, estatísticos, usamos, no geral, funções de verossimilhança para 
-
-Nos modelos mais clássicos de regressão, usa-se a Soma dos Quadrado Ordinários dos Resíduos. isso é, este modelo 
-
-Entendido um pouco mais a fundo o que seria conceitualmente uma Regressão, agora é hora de entender os diferentes tipos de Regressão que existem.
-</p>
 <br>
 
-### Linear vs Não Linear 
-
-
-
-<p></p>
-<br>
-
-### Paramétrica vs Não Paramétrica 
-
-<p></p>
-<br>
 
 
 # Séries Temporais
