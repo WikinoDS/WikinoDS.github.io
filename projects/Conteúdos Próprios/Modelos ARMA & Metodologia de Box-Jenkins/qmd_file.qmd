@@ -1,7 +1,0 @@
----
-title: "Modelos ARMA & Metodologia de Box-Jenkins"
-format: html
-author: Vinicius Aquino
----
-
-
