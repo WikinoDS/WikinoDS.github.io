@@ -1,5 +1,5 @@
 ---
-title: "Curva de Phillipis - Das Primeiras Levadas ao SAMBA"
+title: "Curva de Phillips - Das Primeiras Levadas ao SAMBA"
 format: html
 author: Vinicius Aquino
 lang: pt
