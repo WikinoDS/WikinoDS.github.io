@@ -1,5 +1,5 @@
 ---
-title: "Regressão Linear Aplicado à Séries Temporais com Python"
+title: "Regressão Linear Aplicada à Séries Temporais com Python"
 format: html
 author: Vinicius Aquino
 ---

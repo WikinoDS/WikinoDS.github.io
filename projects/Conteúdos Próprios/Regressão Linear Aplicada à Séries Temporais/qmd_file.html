@@ -8,7 +8,7 @@
 
 <meta name="author" content="Vinicius Aquino">
 
-<title>Regressão Linear Aplicado à Séries Temporais com Python</title>
+<title>Regressão Linear Aplicada à Séries Temporais com Python</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Regressão Linear Aplicado à Séries Temporais com Python</h1>
+<h1 class="title">Regressão Linear Aplicada à Séries Temporais com Python</h1>
 </div>
 
 
@@ -218,7 +218,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Nesse caso, o modelo não seria linear, mas pode-se linearizá-lo usando o logaritimo de <span class="math inline">\(y_{t}\)</span>:</li>
 </ul>
 <p><span class="math display">\[ln(y_{t}) = ln(\beta_{0}) + \beta_{1}t\]</span></p>
-<p>Interessante notar que na prática os dois modelos têm a mesma cara, mas um está olhando para a variável em nível e o outro para o logaritimo dá variável.</p>
+<p>Interessante notar que na prática os dois modelos têm a mesma cara, mas um está olhando para a variável em nível e o outro para o logaritimo da variável.</p>
 <p>Modelando em Python:</p>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">60</span> <span class="co"># tamanho da amostra de treinamento</span></span>
@@ -297,7 +297,7 @@ Dep. Variable:                      y   R-squared:                       0.091
 Model:                            OLS   Adj. R-squared:                  0.076
 Method:                 Least Squares   F-statistic:                     5.831
 Date:                Tue, 12 Dec 2023   Prob (F-statistic):             0.0189
-Time:                        14:54:16   Log-Likelihood:                -412.79
+Time:                        15:07:42   Log-Likelihood:                -412.79
 No. Observations:                  60   AIC:                             829.6
 Df Residuals:                      58   BIC:                             833.8
 Df Model:                           1                                         
@@ -334,7 +334,7 @@ Dep. Variable:                      y   R-squared:                       0.103
 Model:                            OLS   Adj. R-squared:                  0.088
 Method:                 Least Squares   F-statistic:                     6.659
 Date:                Tue, 12 Dec 2023   Prob (F-statistic):             0.0124
-Time:                        14:54:16   Log-Likelihood:                 43.407
+Time:                        15:07:42   Log-Likelihood:                 43.407
 No. Observations:                  60   AIC:                            -82.81
 Df Residuals:                      58   BIC:                            -78.62
 Df Model:                           1                                         
@@ -374,12 +374,13 @@ Notes:
 </div>
 </div>
 <p><br><br></p>
-<p>No caso, os dois modelos, de certa forma, pegaram bem a tendência da série. Vizualizando as previsões por ano:</p>
 <div class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <p><img src="qmd_file_files/figure-html/cell-10-output-1.png" width="658" height="434"></p>
 </div>
 </div>
+<p><br><br></p>
+<p>No caso, os dois modelos, de certa forma, pegaram bem a tendência da série. A questão está nos padrões dos erros relacionados a sazonalidade mensal.</p>
 </section>
 <section id="sazonalidade-mensal" class="level2">
 <h2 class="anchored" data-anchor-id="sazonalidade-mensal">Sazonalidade Mensal</h2>
@@ -539,7 +540,7 @@ Dep. Variable:                      y   R-squared:                       0.963
 Model:                            OLS   Adj. R-squared:                  0.954
 Method:                 Least Squares   F-statistic:                     103.1
 Date:                Tue, 12 Dec 2023   Prob (F-statistic):           1.58e-29
-Time:                        14:54:18   Log-Likelihood:                -316.44
+Time:                        15:07:44   Log-Likelihood:                -316.44
 No. Observations:                  60   AIC:                             658.9
 Df Residuals:                      47   BIC:                             686.1
 Df Model:                          12                                         
@@ -587,7 +588,7 @@ Dep. Variable:                      y   R-squared:                       0.956
 Model:                            OLS   Adj. R-squared:                  0.945
 Method:                 Least Squares   F-statistic:                     85.87
 Date:                Tue, 12 Dec 2023   Prob (F-statistic):           9.41e-28
-Time:                        14:54:18   Log-Likelihood:                 134.11
+Time:                        15:07:44   Log-Likelihood:                 134.11
 No. Observations:                  60   AIC:                            -242.2
 Df Residuals:                      47   BIC:                            -215.0
 Df Model:                          12                                         
