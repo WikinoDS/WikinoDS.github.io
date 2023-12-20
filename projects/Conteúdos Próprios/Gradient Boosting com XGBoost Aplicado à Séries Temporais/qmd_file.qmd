@@ -276,12 +276,12 @@ for i in range(n):
 
     # Treinando modelos
     reg = LinearRegression(fit_intercept=True)
-    reg.fit(X_train, y_train)
-    y_reg_pred = reg.predict(X=X_test)
+    reg.fit(X_train.values, y_train)
+    y_reg_pred = reg.predict(X=X_test.values)
 
     xgb = XGBRegressor()
-    xgb.fit(X_train, y_train)
-    y_xgb_pred = xgb.predict(X=X_test)
+    xgb.fit(X_train.values, y_train)
+    y_xgb_pred = xgb.predict(X=X_test.values)
 
 
     # Salvando acurácia dos modelos
@@ -337,10 +337,10 @@ f, ax = plt.subplots(figsize=(8, 5))
 plt.plot(y_train, 'k', label='Treino')
 plt.plot(y_test, 'r--', label='Teste')
 plt.plot(y_test.index, y_xgb_pred, 'b--', label='XGBoost')
-plt.plot(y_train.index, xgb.predict(X=X_train), 'b')
+plt.plot(y_train.index, xgb.predict(X=X_train.values), 'b')
 
 plt.plot(y_test.index, y_reg_pred, 'g--', label='Regressão')
-plt.plot(y_train.index, reg.predict(X=X_train), 'g')
+plt.plot(y_train.index, reg.predict(X=X_train.values), 'g')
 
 plt.title("Série Temporal")
 plt.show()
@@ -352,8 +352,8 @@ f, ax = plt.subplots(figsize=(8, 5))
 plt.plot(y_train.index.year, y_train, 'ko')
 plt.plot(y_test.index.year, y_test, 'ro')
 
-plt.plot(y_train.index.year.to_list()+[y_test.index[0].year], list(xgb.predict(X=X_train)) + [y_xgb_pred[0]], 'b--')
-plt.plot(y_train.index.year.to_list() + [y_test.index.year[0]], list(reg.predict(X=X_train)) + [y_reg_pred[0]], 'g--')
+plt.plot(y_train.index.year.to_list()+[y_test.index[0].year], list(xgb.predict(X=X_train.values)) + [y_xgb_pred[0]], 'b--')
+plt.plot(y_train.index.year.to_list() + [y_test.index.year[0]], list(reg.predict(X=X_train.values)) + [y_reg_pred[0]], 'g--')
 
 plt.title("Machine Learning")
 plt.show()
@@ -438,12 +438,12 @@ for i in range(n):
    
     # Treinando modelos
     reg = LinearRegression(fit_intercept=True)
-    reg.fit(X_train, y_train)
-    y_reg_pred = reg.predict(X=X_test)
+    reg.fit(X_train.values, y_train)
+    y_reg_pred = reg.predict(X=X_test.values)
 
     xgb = XGBRegressor()
-    xgb.fit(X_train, y_train)
-    y_xgb_pred = xgb.predict(X=X_test)
+    xgb.fit(X_train.values, y_train)
+    y_xgb_pred = xgb.predict(X=X_test.values)
 
 
     # Salvando acurácia dos modelos
@@ -529,6 +529,7 @@ plt.ylim(0)
 plt.legend()
 plt.xlabel("Mês")
 plt.title("Beer Sales (Mês)")
+plt.show()
 ```
 
 É percepitível que o XGBoost pegou bem o padrão sazonal, no entanto, erra em acertar o nível (tendência). Novamente o problema citado na seção anterior.
@@ -581,12 +582,12 @@ for i in range(n):
     
     # Treinando modelos
     reg = LinearRegression(fit_intercept=True)
-    reg.fit(X_train, y_train)
-    y_reg_pred = reg.predict(X=X_test)
+    reg.fit(X_train.values, y_train)
+    y_reg_pred = reg.predict(X=X_test.values)
 
     xgb = XGBRegressor()
-    xgb.fit(X_train, y_train)
-    y_xgb_pred = xgb.predict(X=X_test)
+    xgb.fit(X_train.values, y_train)
+    y_xgb_pred = xgb.predict(X=X_test.values)
 
 
     # Retornando as variáveis para escala padrão (integrando):
@@ -594,10 +595,10 @@ for i in range(n):
     y_test = np.exp(np.log(df.iloc[index[0][0], 0]) + y_test.cumsum())[-12:]
 
 
-    y_reg_pred = np.array([0] + list(reg.predict(X=X_train)[:,0]) + list(y_reg_pred[:,0]))
+    y_reg_pred = np.array([0] + list(reg.predict(X=X_train.values)[:,0]) + list(y_reg_pred[:,0]))
     y_reg_pred = np.exp(np.log(df.iloc[index[0][0], 0]) + y_reg_pred.cumsum())
 
-    y_xgb_pred = np.array([0] + list(xgb.predict(X=X_train)) + list(y_xgb_pred))
+    y_xgb_pred = np.array([0] + list(xgb.predict(X=X_train.values)) + list(y_xgb_pred))
     y_xgb_pred = np.exp(np.log(df.iloc[index[0][0], 0]) + y_xgb_pred.cumsum())
 
 

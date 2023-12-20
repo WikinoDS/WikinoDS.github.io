@@ -364,12 +364,12 @@ date
 <span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Treinando modelos</span></span>
 <span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    reg <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    reg.fit(X_train, y_train)</span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> reg.predict(X<span class="op">=</span>X_test)</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    reg.fit(X_train.values, y_train)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> reg.predict(X<span class="op">=</span>X_test.values)</span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    xgb <span class="op">=</span> XGBRegressor()</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    xgb.fit(X_train, y_train)</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> xgb.predict(X<span class="op">=</span>X_test)</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    xgb.fit(X_train.values, y_train)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> xgb.predict(X<span class="op">=</span>X_test.values)</span>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Salvando acurácia dos modelos</span></span>
@@ -503,12 +503,12 @@ p valor:  0.013</code></pre>
 <span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>   </span>
 <span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Treinando modelos</span></span>
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    reg <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    reg.fit(X_train, y_train)</span>
-<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> reg.predict(X<span class="op">=</span>X_test)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    reg.fit(X_train.values, y_train)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> reg.predict(X<span class="op">=</span>X_test.values)</span>
 <span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    xgb <span class="op">=</span> XGBRegressor()</span>
-<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    xgb.fit(X_train, y_train)</span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> xgb.predict(X<span class="op">=</span>X_test)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    xgb.fit(X_train.values, y_train)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> xgb.predict(X<span class="op">=</span>X_test.values)</span>
 <span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Salvando acurácia dos modelos</span></span>
@@ -524,198 +524,6 @@ p valor:  0.013</code></pre>
 <span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"XGBoost vence: </span><span class="sc">{</span>(acc_xgb_2<span class="op">&gt;</span>acc_reg_2)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="bu">round</span>(<span class="dv">100</span><span class="op">*</span>(acc_xgb_2<span class="op">&gt;</span>acc_reg_2).<span class="bu">sum</span>()<span class="op">/</span>n, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> %)"</span>)</span>
 <span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
 <span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"regressão vence: </span><span class="sc">{</span>(acc_xgb_2<span class="op">&lt;</span>acc_reg_2)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="bu">round</span>(<span class="dv">100</span><span class="op">*</span>(acc_xgb_2<span class="op">&lt;</span>acc_reg_2).<span class="bu">sum</span>()<span class="op">/</span>n, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> %)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0.94956268 0.96975878 0.95273909 0.9895277  0.96724426 0.95933134
  0.996359   0.98306074 0.94584999 0.95548503 0.9947364  0.96824616
@@ -730,16 +538,6 @@ Feature names only support names that are all strings. Got feature names with dt
 XGBoost vence: 5 (23.81 %)
 
 regressão vence: 16 (76.19 %)</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
 </div>
 </div>
 <p>E o XGBoost segue performando ABAIXO da regressão linear. Dando uma explorada na forma com que ele lidou com os dados:</p>
@@ -759,24 +557,22 @@ Feature names only support names that are all strings. Got feature names with dt
 </div>
 <p>Nas covariáveis de sazonalidade:</p>
 <div class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> y_train.index.year.unique():</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    df_temp <span class="op">=</span> y_train.loc[y_train.index.year <span class="op">==</span> year]</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    ax.plot(df_temp.index.month, df_temp.beer, color<span class="op">=</span><span class="st">'k'</span>)</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>ax.plot(y_test.index.month, y_xgb_pred, <span class="st">'b--'</span>, label<span class="op">=</span><span class="st">'XGBoost'</span>)</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>ax.plot(y_test.index.month, y_reg_pred, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'Regressão'</span>)</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>ax.plot(y_test.index.month, y_test, <span class="st">'r--'</span>, label<span class="op">=</span><span class="st">'Teste'</span>)</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>)</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Mês"</span>)</span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Beer Sales (Mês)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
-<pre><code>Text(0.5, 1.0, 'Beer Sales (Mês)')</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> y_train.index.year.unique():</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    df_temp <span class="op">=</span> y_train.loc[y_train.index.year <span class="op">==</span> year]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    ax.plot(df_temp.index.month, df_temp.beer, color<span class="op">=</span><span class="st">'k'</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>ax.plot(y_test.index.month, y_xgb_pred, <span class="st">'b--'</span>, label<span class="op">=</span><span class="st">'XGBoost'</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>ax.plot(y_test.index.month, y_reg_pred, <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'Regressão'</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>ax.plot(y_test.index.month, y_test, <span class="st">'r--'</span>, label<span class="op">=</span><span class="st">'Teste'</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Mês"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Beer Sales (Mês)"</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="qmd_file_files/figure-html/cell-25-output-2.png" width="658" height="455"></p>
+<p><img src="qmd_file_files/figure-html/cell-25-output-1.png" width="658" height="455"></p>
 </div>
 </div>
 <p>É percepitível que o XGBoost pegou bem o padrão sazonal, no entanto, erra em acertar o nível (tendência). Novamente o problema citado na seção anterior.</p>
@@ -785,344 +581,84 @@ Feature names only support names that are all strings. Got feature names with dt
 <h3 class="anchored" data-anchor-id="removendo-tendência">Removendo Tendência:</h3>
 <p>Será feito uma transformação na variável <span class="math inline">\(y_{t}\)</span> a fim de que a previsão dela seja “facilitada” para os modelos.</p>
 <div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>ax.plot(df.diff().dropna()[<span class="st">'beer'</span>], <span class="st">'k'</span>)</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Variação Nominal"</span>)</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ax.plot(df.diff().dropna()[<span class="st">'beer'</span>], <span class="st">'k'</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Variação Nominal"</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="qmd_file_files/figure-html/cell-26-output-1.png" width="681" height="434"></p>
 </div>
 </div>
 <p>A série continua, ainda, não estacionária, posto que sua variância aumenta em função do tempo. A gente pode remover essa heterocedasticidade usando o logaritmo da série (e o derivando, dado que ele também não é estacionário):</p>
 <div class="cell" data-execution_count="26">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>ax.plot((np.log(df[<span class="st">'beer'</span>])).diff().dropna(), <span class="st">'k'</span>)</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Variação Nominal do Logaritmo"</span>)</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>ax.plot((np.log(df[<span class="st">'beer'</span>])).diff().dropna(), <span class="st">'k'</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Variação Nominal do Logaritmo"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="qmd_file_files/figure-html/cell-27-output-1.png" width="668" height="435"></p>
 </div>
 </div>
 <p>Neste caso, a série passa a se comportar de forma estacionária. Rodando os modelos novamente:</p>
 <div class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(<span class="bu">list</span>(cv.split(df)))</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>acc_reg_3 <span class="op">=</span> []</span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>acc_xgb_3 <span class="op">=</span> []</span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> <span class="bu">next</span>(cv_generator)</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Separando teste do treino</span></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> df.iloc[index[<span class="dv">0</span>]].copy()</span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> df.iloc[index[<span class="dv">1</span>]].copy()</span>
-<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fazendo a transformação</span></span>
-<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>    df_temp <span class="op">=</span> np.log(pd.concat([y_train, y_test])).diff().dropna()</span>
-<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>    y_train, y_test <span class="op">=</span> df_temp.loc[y_train.index[<span class="dv">1</span>:]], df_temp.loc[y_test.index]</span>
-<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    X_train <span class="op">=</span> data_featuring_sazo(y_train)</span>
-<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>    X_test <span class="op">=</span> data_featuring_sazo(y_test)</span>
-<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Treinando modelos</span></span>
-<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>    reg <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>    reg.fit(X_train, y_train)</span>
-<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> reg.predict(X<span class="op">=</span>X_test)</span>
-<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>    xgb <span class="op">=</span> XGBRegressor()</span>
-<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>    xgb.fit(X_train, y_train)</span>
-<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> xgb.predict(X<span class="op">=</span>X_test)</span>
-<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Retornando as variáveis para escala padrão (integrando):</span></span>
-<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(y_train.beer.values) <span class="op">+</span> <span class="bu">list</span>(y_test.beer.values))</span>
-<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> np.exp(np.log(df.iloc[index[<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">0</span>]) <span class="op">+</span> y_test.cumsum())[<span class="op">-</span><span class="dv">12</span>:]</span>
-<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(reg.predict(X<span class="op">=</span>X_train)[:,<span class="dv">0</span>]) <span class="op">+</span> <span class="bu">list</span>(y_reg_pred[:,<span class="dv">0</span>]))</span>
-<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> np.exp(np.log(df.iloc[index[<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">0</span>]) <span class="op">+</span> y_reg_pred.cumsum())</span>
-<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(xgb.predict(X<span class="op">=</span>X_train)) <span class="op">+</span> <span class="bu">list</span>(y_xgb_pred))</span>
-<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> np.exp(np.log(df.iloc[index[<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">0</span>]) <span class="op">+</span> y_xgb_pred.cumsum())</span>
-<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Salvando acurácia dos modelos</span></span>
-<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a>    acc_reg_3.append(<span class="dv">1</span><span class="op">-</span><span class="bu">abs</span>(y_test.<span class="bu">sum</span>() <span class="op">-</span> y_reg_pred[<span class="op">-</span><span class="dv">12</span>:].<span class="bu">sum</span>())<span class="op">/</span>y_test.<span class="bu">sum</span>())</span>
-<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a>    acc_xgb_3.append(<span class="dv">1</span><span class="op">-</span><span class="bu">abs</span>(y_test.<span class="bu">sum</span>()<span class="op">-</span> y_xgb_pred[<span class="op">-</span><span class="dv">12</span>:].<span class="bu">sum</span>())<span class="op">/</span>y_test.<span class="bu">sum</span>())</span>
-<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a>acc_reg_3,acc_xgb_3 <span class="op">=</span> np.array(acc_reg_3), np.array(acc_xgb_3)</span>
-<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(acc_reg_3)</span>
-<span id="cb42-51"><a href="#cb42-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(acc_xgb_3)</span>
-<span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"XGBoost vence: </span><span class="sc">{</span>(acc_xgb_3<span class="op">&gt;</span>acc_reg_3)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="bu">round</span>(<span class="dv">100</span><span class="op">*</span>(acc_xgb_3<span class="op">&gt;</span>acc_reg_3).<span class="bu">sum</span>()<span class="op">/</span>n, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> %)"</span>)</span>
-<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
-<span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"regressão vence: </span><span class="sc">{</span>(acc_xgb_3<span class="op">&lt;</span>acc_reg_3)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="bu">round</span>(<span class="dv">100</span><span class="op">*</span>(acc_xgb_3<span class="op">&lt;</span>acc_reg_3).<span class="bu">sum</span>()<span class="op">/</span>n, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> %)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(<span class="bu">list</span>(cv.split(df)))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>acc_reg_3 <span class="op">=</span> []</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>acc_xgb_3 <span class="op">=</span> []</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n):</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    index <span class="op">=</span> <span class="bu">next</span>(cv_generator)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Separando teste do treino</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    y_train <span class="op">=</span> df.iloc[index[<span class="dv">0</span>]].copy()</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> df.iloc[index[<span class="dv">1</span>]].copy()</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Fazendo a transformação</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>    df_temp <span class="op">=</span> np.log(pd.concat([y_train, y_test])).diff().dropna()</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>    y_train, y_test <span class="op">=</span> df_temp.loc[y_train.index[<span class="dv">1</span>:]], df_temp.loc[y_test.index]</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    X_train <span class="op">=</span> data_featuring_sazo(y_train)</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    X_test <span class="op">=</span> data_featuring_sazo(y_test)</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Treinando modelos</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    reg <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    reg.fit(X_train.values, y_train)</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> reg.predict(X<span class="op">=</span>X_test.values)</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    xgb <span class="op">=</span> XGBRegressor()</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    xgb.fit(X_train.values, y_train)</span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> xgb.predict(X<span class="op">=</span>X_test.values)</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Retornando as variáveis para escala padrão (integrando):</span></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(y_train.beer.values) <span class="op">+</span> <span class="bu">list</span>(y_test.beer.values))</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>    y_test <span class="op">=</span> np.exp(np.log(df.iloc[index[<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">0</span>]) <span class="op">+</span> y_test.cumsum())[<span class="op">-</span><span class="dv">12</span>:]</span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(reg.predict(X<span class="op">=</span>X_train.values)[:,<span class="dv">0</span>]) <span class="op">+</span> <span class="bu">list</span>(y_reg_pred[:,<span class="dv">0</span>]))</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a>    y_reg_pred <span class="op">=</span> np.exp(np.log(df.iloc[index[<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">0</span>]) <span class="op">+</span> y_reg_pred.cumsum())</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> np.array([<span class="dv">0</span>] <span class="op">+</span> <span class="bu">list</span>(xgb.predict(X<span class="op">=</span>X_train.values)) <span class="op">+</span> <span class="bu">list</span>(y_xgb_pred))</span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a>    y_xgb_pred <span class="op">=</span> np.exp(np.log(df.iloc[index[<span class="dv">0</span>][<span class="dv">0</span>], <span class="dv">0</span>]) <span class="op">+</span> y_xgb_pred.cumsum())</span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Salvando acurácia dos modelos</span></span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>    acc_reg_3.append(<span class="dv">1</span><span class="op">-</span><span class="bu">abs</span>(y_test.<span class="bu">sum</span>() <span class="op">-</span> y_reg_pred[<span class="op">-</span><span class="dv">12</span>:].<span class="bu">sum</span>())<span class="op">/</span>y_test.<span class="bu">sum</span>())</span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>    acc_xgb_3.append(<span class="dv">1</span><span class="op">-</span><span class="bu">abs</span>(y_test.<span class="bu">sum</span>()<span class="op">-</span> y_xgb_pred[<span class="op">-</span><span class="dv">12</span>:].<span class="bu">sum</span>())<span class="op">/</span>y_test.<span class="bu">sum</span>())</span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>acc_reg_3,acc_xgb_3 <span class="op">=</span> np.array(acc_reg_3), np.array(acc_xgb_3)</span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(acc_reg_3)</span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(acc_xgb_3)</span>
+<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"XGBoost vence: </span><span class="sc">{</span>(acc_xgb_3<span class="op">&gt;</span>acc_reg_3)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="bu">round</span>(<span class="dv">100</span><span class="op">*</span>(acc_xgb_3<span class="op">&gt;</span>acc_reg_3).<span class="bu">sum</span>()<span class="op">/</span>n, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> %)"</span>)</span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"regressão vence: </span><span class="sc">{</span>(acc_xgb_3<span class="op">&lt;</span>acc_reg_3)<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span><span class="bu">round</span>(<span class="dv">100</span><span class="op">*</span>(acc_xgb_3<span class="op">&lt;</span>acc_reg_3).<span class="bu">sum</span>()<span class="op">/</span>n, <span class="dv">2</span>)<span class="sc">}</span><span class="ss"> %)"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[0.99532842 0.93930839 0.95202871 0.97169372 0.93077445 0.98235854
  0.97826689 0.97537997 0.98561417 0.99258848 0.98632184 0.96603365
@@ -1138,45 +674,27 @@ XGBoost vence: 12 (57.14 %)
 
 regressão vence: 9 (42.86 %)</code></pre>
 </div>
-<div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-
-C:\Users\u125948\Anaconda3\envs\DataScience\lib\site-packages\sklearn\utils\validation.py:1858: FutureWarning:
-
-Feature names only support names that are all strings. Got feature names with dtypes: ['int', 'str']. An error will be raised in 1.2.
-</code></pre>
-</div>
 </div>
 <p>E o jogo virou! O XGBoost performa melhor 17 vezes, contra 4 da regressão linear. Será que vencer 81% de 21 duelos é o bastante para dizer que ele é melhor? Bom, é uma hipótese que pode ser testada.</p>
 <div class="cell" data-execution_count="28">
-<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co">#echo: True</span></span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_xgb_3, <span class="st">'b-o'</span>, label<span class="op">=</span><span class="st">'XGBoost'</span>)</span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_reg_3, <span class="st">'g-o'</span>, label<span class="op">=</span><span class="st">'Regressão'</span>)</span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="fl">1.1</span>)</span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, ls<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>plt.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Análise de Performance"</span>)</span>
-<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#echo: True</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_xgb_3, <span class="st">'b-o'</span>, label<span class="op">=</span><span class="st">'XGBoost'</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_reg_3, <span class="st">'g-o'</span>, label<span class="op">=</span><span class="st">'Regressão'</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="fl">1.1</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, ls<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plt.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Análise de Performance"</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="qmd_file_files/figure-html/cell-29-output-1.png" width="645" height="434"></p>
 </div>
 </div>
 <div class="cell" data-execution_count="29">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>test(a<span class="op">=</span>acc_xgb_3,</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>     b<span class="op">=</span>acc_reg_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>test(a<span class="op">=</span>acc_xgb_3,</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>     b<span class="op">=</span>acc_reg_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Testes: 21
 A venceu: 12
