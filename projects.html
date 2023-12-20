@@ -65,7 +65,7 @@
 
             for (const tree of data["tree"]) {
                 const path = tree.path.split('/')
-
+                log.console(path)
                 if (path[0] === "projects" && path.length == 2 && !projects.hasOwnProperty(path[1])) {                  
                   projects[path[1]] = []
                                                                                                       }
