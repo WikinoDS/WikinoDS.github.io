@@ -86,19 +86,19 @@ $$y_{i} = r_{1}(x_{i}) + \epsilon_{1i} = tree_{1}(x_{i}) + \epsilon_{1i}$$
 
 A árvore 2 é treinanda com os resíduos $\epsilon_{1}$ da árvore 1:
 
-$$(y_{i}-tree_{1}) = \epsilon_{1i} = r_{2}(x_{i}) + \epsilon_{2i} = tree_{2}(x_{i}) + \epsilon_{2i}$$
+$$(y_{i}-tree_{1}(x_{i})) = \epsilon_{1i} = r_{2}(x_{i}) + \epsilon_{2i} = tree_{2}(x_{i}) + \epsilon_{2i}$$
 
 Por fim, a árvore 3 é treinada com os resíduos da árvore 2, isso é:
 
-$$(y_{i}-tree_{1}) - tree_{2}(x_{i}) = \epsilon_{1i} = r_{3}(x_{i}) + \epsilon_{3i} = tree_{3}(x_{i}) + \epsilon_{3i}$$
+$$(y_{i}-tree_{1}(x_{i})) - tree_{2}(x_{i}) = \epsilon_{1i} = r_{3}(x_{i}) + \epsilon_{3i} = tree_{3}(x_{i}) + \epsilon_{3i}$$
 
 A idéia intuitiva é que se adicione novas árvores conforme isso reduza os erros em teste, até que não seja possível mais entender os padrões em $\epsilon_{q}$.
 
-Como o modelo em questão parou em $\epsilon_{3}$, isso é, assume-se que $\epsilon_{3}$ não tem padrão, é um mero rúido, pode-se reescrever a equação acima como:
+Pode-se reescrever a equação acima como:
 
-$$y_{i}-tree_{1} - tree_{2}(x_{i}) - tree_{3}(x_{i}) = \epsilon_{3i}$$
+$$y_{i}-tree_{1}(x_{i}) - tree_{2}(x_{i}) - tree_{3}(x_{i}) = \epsilon_{3i}$$
 
-$$y_{i} = tree_{1} + tree_{2}(x_{i}) + tree_{3}(x_{i}) + \epsilon_{3i}$$
+$$y_{i} = tree_{1}(x_{i}) + tree_{2}(x_{i}) + tree_{3}(x_{i}) + \epsilon_{3i}$$
 
 Ou seja, a previsão da i-esima observação $y_{i}$ é a soma das previsões das árvores. Do ponto de vista da regressão não paramétrica, o modelo é dado por:
 
@@ -312,11 +312,15 @@ ax.axhline(y=1, color='k', ls='--', alpha=.3)
 
 ax.set_xlabel("Rodada")
 ax.set_ylabel("Acurácia")
-
-ax.set_ylim(.8, 1.02)
-ax.set_xticks([int(i) for i in ax.get_xticks()])
+plt.ylim(.8, 1.1)
+plt.axhline(y=1, color='k', alpha=.5, ls='--')
 plt.legend(frameon=False)
+
+plt.xticks(np.arange(0, 22, 2))
+plt.xlabel("Round")
+plt.ylabel("Acurácia")
 plt.title("Análise de Performance")
+plt.grid(False)
 plt.show()
 ```
 
@@ -625,12 +629,17 @@ f, ax = plt.subplots(figsize=(8, 5))
 
 ax.plot(acc_xgb_3, 'b-o', label='XGBoost')
 ax.plot(acc_reg_3, 'g-o', label='Regressão')
-
-plt.ylim(0, 1.1)
+plt.ylim(.8, 1.1)
 plt.axhline(y=1, color='k', alpha=.5, ls='--')
 plt.legend(frameon=False)
+
+plt.xticks(np.arange(0, 22, 2))
+plt.xlabel("Round")
+plt.ylabel("Acurácia")
 plt.title("Análise de Performance")
+plt.grid(False)
 plt.show()
+
 ```
 
 ```{python}
@@ -638,12 +647,36 @@ test(a=acc_xgb_3,
      b=acc_reg_3)
 ```
 
-Observa-se um p-valor de 0.4%. Isso é, é possível rejeitar a hipótese de que os dois modelos tem performance semelhante e, portanto, não foi pelo acaso que o XGBoost performou acima da regressão linear. 
+Observa-se um p-valor de 33%. Isso é, apesar de ter performado acima da Regressão Linear, não há evidências para dizermos que o XGBoost é melhor do que a Regressão. O que, em termos práticos, quer dizer que para esse dataset, uma regressão linear vai ter performance similar a regressões não paramétricas. O XGBoost pode, ainda, ganhar algumas covariáveis, defasagens e etc. De todo jeito, é um bom modelo a ter na caixa de ferramentas de cientista de dados.
 
-Vizualizando o último modelo vindo da escala log pra ver como está "visualmente" o modelo:
+A título de comparação, abaixo é possível ver a performance dos 3 XGBoost treinados ao longo do texto:
 
 ```{python}
-#| echo: False
+#echo: True
+f, ax = plt.subplots(figsize=(8, 5))
+
+ax.plot(acc_xgb_1, 'b-o', alpha=.5, label='XGBoost 1')
+ax.plot(acc_xgb_2, 'r-o', alpha=.5, label='XGBoost 2')
+ax.plot(acc_xgb_3, 'g-o', alpha=.5, label='XGBoost 3')
+
+plt.ylim(.8, 1.1)
+plt.axhline(y=1, color='k', alpha=.5, ls='--')
+plt.legend(frameon=False)
+
+plt.xticks(np.arange(0, 22, 2))
+plt.xlabel("Round")
+plt.ylabel("Acurácia")
+plt.title("Análise de Performance")
+plt.grid(False)
+plt.show()
+```
+
+
+Ficando nítido o ganho de performance com o tratamento da tendência. Vizualizando o último modelo vindo da escala log pra ver como está "visualmente" o modelo:
+
+```{python}
+#| echo: True
+#| 
 
 y_train = df.iloc[index[0]].copy()
 y_test = df.iloc[index[1]].copy()
@@ -690,3 +723,4 @@ Para sofrer um pouquinho com séries temporais e entender a fundo a “lógica�
 Para uma introdução no universo do Machine Learning, o livro <a href="https://www.amazon.com.br/M%C3%A3os-obra-aprendizado-scikit-learn-tensorflow/dp/8550803812/ref=sr_1_4?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=4OWMSIKND5IS&keywords=aprendizado+de+maquina&qid=1703042541&s=books&sprefix=aprendizado+de+maquina%2Cstripbooks%2C262&sr=1-4" target="_blank" rel="noopener noreferrer">Mãos à Obra: Aprendizado de Máquina com Scikit-Learn & TensorFlow</a>. É um livro básico, mas que é legal ter como consulta, como foi o caso na construção do texto.
 
 Para mais usos de Aprendizado de Máquina Supervisionado em séries temporais, o livro <a href="https://www.amazon.com.br/Advanced-Forecasting-Python-State-Art-Models/dp/1484271491/ref=sr_1_1?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=31X3J7B6L1YS&keywords=Advanced+Forecasting+with+Python&qid=1703042592&s=books&sprefix=advanced+forecasting+with+python%2Cstripbooks%2C515&sr=1-1&ufe=app_do%3Aamzn1.fos.4bb5663b-6f7d-4772-84fa-7c7f565ec65b" target="_blank" rel="noopener noreferrer">Advanced Forecasting with Python</a>. Não é tão advanced assim e o autor acaba pecando fortemente na exploração de alguns modelos, mas é o preço que se paga por querer ensinar +10 modelos distintos em menos de 300 pgs.
+

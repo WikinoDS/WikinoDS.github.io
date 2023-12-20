@@ -197,13 +197,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Dessa forma, cada árvore se especializou em aprender a “consertar” os erros das arvores que vieram antes. Voltando a ideia de regressão não paramétrica, o modelo inicial dado é:</p>
 <p><span class="math display">\[y_{i} = r_{1}(x_{i}) + \epsilon_{1i} = tree_{1}(x_{i}) + \epsilon_{1i}\]</span></p>
 <p>A árvore 2 é treinanda com os resíduos <span class="math inline">\(\epsilon_{1}\)</span> da árvore 1:</p>
-<p><span class="math display">\[(y_{i}-tree_{1}) = \epsilon_{1i} = r_{2}(x_{i}) + \epsilon_{2i} = tree_{2}(x_{i}) + \epsilon_{2i}\]</span></p>
+<p><span class="math display">\[(y_{i}-tree_{1}(x_{i})) = \epsilon_{1i} = r_{2}(x_{i}) + \epsilon_{2i} = tree_{2}(x_{i}) + \epsilon_{2i}\]</span></p>
 <p>Por fim, a árvore 3 é treinada com os resíduos da árvore 2, isso é:</p>
-<p><span class="math display">\[(y_{i}-tree_{1}) - tree_{2}(x_{i}) = \epsilon_{1i} = r_{3}(x_{i}) + \epsilon_{3i} = tree_{3}(x_{i}) + \epsilon_{3i}\]</span></p>
+<p><span class="math display">\[(y_{i}-tree_{1}(x_{i})) - tree_{2}(x_{i}) = \epsilon_{1i} = r_{3}(x_{i}) + \epsilon_{3i} = tree_{3}(x_{i}) + \epsilon_{3i}\]</span></p>
 <p>A idéia intuitiva é que se adicione novas árvores conforme isso reduza os erros em teste, até que não seja possível mais entender os padrões em <span class="math inline">\(\epsilon_{q}\)</span>.</p>
-<p>Como o modelo em questão parou em <span class="math inline">\(\epsilon_{3}\)</span>, isso é, assume-se que <span class="math inline">\(\epsilon_{3}\)</span> não tem padrão, é um mero rúido, pode-se reescrever a equação acima como:</p>
-<p><span class="math display">\[y_{i}-tree_{1} - tree_{2}(x_{i}) - tree_{3}(x_{i}) = \epsilon_{3i}\]</span></p>
-<p><span class="math display">\[y_{i} = tree_{1} + tree_{2}(x_{i}) + tree_{3}(x_{i}) + \epsilon_{3i}\]</span></p>
+<p>Pode-se reescrever a equação acima como:</p>
+<p><span class="math display">\[y_{i}-tree_{1}(x_{i}) - tree_{2}(x_{i}) - tree_{3}(x_{i}) = \epsilon_{3i}\]</span></p>
+<p><span class="math display">\[y_{i} = tree_{1}(x_{i}) + tree_{2}(x_{i}) + tree_{3}(x_{i}) + \epsilon_{3i}\]</span></p>
 <p>Ou seja, a previsão da i-esima observação <span class="math inline">\(y_{i}\)</span> é a soma das previsões das árvores. Do ponto de vista da regressão não paramétrica, o modelo é dado por:</p>
 <p><span class="math display">\[y_{i} = r(x_{i}) + \epsilon_{i} = \sum^{q}_{i=1}tree_{i}(x_i) + \epsilon_{i}\]</span></p>
 <p>Onde cada árvore <span class="math inline">\(tree_i\)</span> foi treinada em paralelo.</p>
@@ -404,7 +404,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 <p>Como pode ser visto, o XGBoost perfoma acima da regressão linear em somente 5 de 21 casos (23%). Será que a regressão realmente performa acima ou esse valor pode ter vindo do acaso? Bom, testa-se a hipótese de que a regressão linear tem probabilidade 50% de vencer o XGBoost.</p>
 <div class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
-<p><img src="qmd_file_files/figure-html/cell-15-output-1.png" width="691" height="455"></p>
+<p><img src="qmd_file_files/figure-html/cell-15-output-1.png" width="674" height="455"></p>
 </div>
 </div>
 <div class="cell" data-execution_count="15">
@@ -682,14 +682,18 @@ regressão vence: 9 (42.86 %)</code></pre>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_xgb_3, <span class="st">'b-o'</span>, label<span class="op">=</span><span class="st">'XGBoost'</span>)</span>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_reg_3, <span class="st">'g-o'</span>, label<span class="op">=</span><span class="st">'Regressão'</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">0</span>, <span class="fl">1.1</span>)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, ls<span class="op">=</span><span class="st">'--'</span>)</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>plt.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Análise de Performance"</span>)</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="fl">.8</span>, <span class="fl">1.1</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, ls<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>plt.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>plt.xticks(np.arange(<span class="dv">0</span>, <span class="dv">22</span>, <span class="dv">2</span>))</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Round"</span>)</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Acurácia"</span>)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Análise de Performance"</span>)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="qmd_file_files/figure-html/cell-29-output-1.png" width="645" height="434"></p>
+<p><img src="qmd_file_files/figure-html/cell-29-output-1.png" width="674" height="455"></p>
 </div>
 </div>
 <div class="cell" data-execution_count="29">
@@ -704,11 +708,47 @@ Não há evidências para dizer que o A é o melhor modelo
 p valor:  0.332</code></pre>
 </div>
 </div>
-<p>Observa-se um p-valor de 0.4%. Isso é, é possível rejeitar a hipótese de que os dois modelos tem performance semelhante e, portanto, não foi pelo acaso que o XGBoost performou acima da regressão linear.</p>
-<p>Vizualizando o último modelo vindo da escala log pra ver como está “visualmente” o modelo:</p>
+<p>Observa-se um p-valor de 33%. Isso é, apesar de ter performado acima da Regressão Linear, não há evidências para dizermos que o XGBoost é melhor do que a Regressão. O que, em termos práticos, quer dizer que para esse dataset, uma regressão linear vai ter performance similar a regressões não paramétricas. O XGBoost pode, ainda, ganhar algumas covariáveis, defasagens e etc. De todo jeito, é um bom modelo a ter na caixa de ferramentas de cientista de dados.</p>
+<p>A título de comparação, abaixo é possível ver a performance dos 3 XGBoost treinados ao longo do texto:</p>
 <div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#echo: True</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_xgb_1, <span class="st">'b-o'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, label<span class="op">=</span><span class="st">'XGBoost 1'</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_xgb_2, <span class="st">'r-o'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, label<span class="op">=</span><span class="st">'XGBoost 2'</span>)</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>ax.plot(acc_xgb_3, <span class="st">'g-o'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, label<span class="op">=</span><span class="st">'XGBoost 3'</span>)</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="fl">.8</span>, <span class="fl">1.1</span>)</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">1</span>, color<span class="op">=</span><span class="st">'k'</span>, alpha<span class="op">=</span><span class="fl">.5</span>, ls<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>plt.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>plt.xticks(np.arange(<span class="dv">0</span>, <span class="dv">22</span>, <span class="dv">2</span>))</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Round"</span>)</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Acurácia"</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Análise de Performance"</span>)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">False</span>)</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="qmd_file_files/figure-html/cell-31-output-1.png" width="658" height="435"></p>
+<p><img src="qmd_file_files/figure-html/cell-31-output-1.png" width="674" height="455"></p>
+</div>
+</div>
+<p>Ficando nítido o ganho de performance com o tratamento da tendência. Vizualizando o último modelo vindo da escala log pra ver como está “visualmente” o modelo:</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> df.iloc[index[<span class="dv">0</span>]].copy()</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> df.iloc[index[<span class="dv">1</span>]].copy()</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>plt.plot(y_train, <span class="st">'k'</span>, label<span class="op">=</span><span class="st">'Treino'</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>plt.plot(y_test, <span class="st">'r--'</span>, label<span class="op">=</span><span class="st">'Teste'</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>plt.plot(y_test.index, y_xgb_pred[<span class="op">-</span><span class="dv">12</span>:], <span class="st">'b--'</span>, label<span class="op">=</span><span class="st">'XGBoost'</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>plt.plot(y_test.index, y_reg_pred[<span class="op">-</span><span class="dv">12</span>:], <span class="st">'g--'</span>, label<span class="op">=</span><span class="st">'Regressão'</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>plt.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Série Temporal"</span>)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="qmd_file_files/figure-html/cell-32-output-1.png" width="658" height="435"></p>
 </div>
 </div>
 <p>Agora, sim, com “carinha” de modelo de série temporal.</p>
