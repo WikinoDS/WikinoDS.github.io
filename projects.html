@@ -34,15 +34,19 @@
 
   <!-- CONTENT SECTION !-->
   <section id="main-content">
-
-    <div id="project-block">
+      <div class="text-intro">
+        <h3>Textos Publicados</h3>
+    
+        <div id="project-block">
       <table style="width:100%" id="table-projects">
         <tr>
-          <th>Name</th>
-          <th>Class</th>
-          <th>Last Update</th>
+          <th>Nome</th>
+          <th>Texto Autoral</th>
+          <th>Área</th>
+          <th>Subárea</th>
+          <th>Publicado</th>
         </tr>
-    </div>
+    </div></div>
 
 
     <script>
@@ -61,9 +65,11 @@
                 if (path[0] === "projects" && path[path.length -1] === 'qmd_file.html' && path.length > 2 && !projects[path[1]].includes(path[2])) {                  
                   var currentDir = path
                   currentDir = currentDir.toString().replaceAll(",", "/")
-                  console.log("./" + currentDir)
 
-                  fetch("./" + currentDir)
+
+                  currentDir = "https://wikinods.github.io/projects/Conte%C3%BAdos%20Pr%C3%B3prios/Gradient%20Boosting%20com%20XGBoost%20Aplicado%20%C3%A0%20S%C3%A9ries%20Temporais/qmd_file.html"
+                  fetch(currentDir)
+//                  fetch("./" + currentDir)
                                   .then(function (response) {
                                       if (response.ok) {
                                           return response.text();} 
@@ -76,8 +82,6 @@
                                       const parsedDocument = parser.parseFromString(html, 'text/html');
                                       
                                       const text_name = parsedDocument.getElementsByTagName("title")[0].text
-                                      console.log(text_name)
-                                      console.log(parsedDocument)
                                       const metas = parsedDocument.getElementsByTagName("meta")
                                       var date = ""
 
@@ -93,10 +97,14 @@
                                       var cell_1 = row.insertCell(0);
                                       var cell_2 = row.insertCell(1);
                                       var cell_3 = row.insertCell(2);
+                                      var cell_4 = row.insertCell(3);
+                                      var cell_5 = row.insertCell(4);
 
-                                      cell_1.innerHTML = `<a href="./projects/${path[1]}/${path[2]}/index.html">${text_name}</a>`
+                                      cell_1.innerHTML = `<a href="./projects/${path[1]}/${path[2]}/${path[3]}/${path[4]}/index.html">${text_name}</a>`
                                       cell_2.innerHTML = path[1]
-                                      cell_3.innerHTML = date                    
+                                      cell_3.innerHTML = path[2]
+                                      cell_4.innerHTML = path[3]
+                                      cell_5.innerHTML = date                    
                                                                 })                              
                   
                 }                                    
@@ -112,10 +120,6 @@
 
   </section>
 
-  <!-- FOOTER SECTION !-->
-  <footer>
-    <div><small>by <a target="_blank" rel="nofollow" href="https://www.linkedin.com/in/vinicius-aquino-in/">Vinicius Aquino</a>.</small></div>
-  </footer>
 </body>
 
 </html>
