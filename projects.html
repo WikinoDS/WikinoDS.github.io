@@ -80,6 +80,8 @@
                                       const parsedDocument = parser.parseFromString(html, 'text/html');
                                       
                                       const text_name = parsedDocument.getElementsByTagName("title")[0].text
+                                      console.log(text_name)
+                                      console.log(parsedDocument.getElementsByTagName("title"))
                                       const metas = parsedDocument.getElementsByTagName("meta")
                                       var date = ""
 
