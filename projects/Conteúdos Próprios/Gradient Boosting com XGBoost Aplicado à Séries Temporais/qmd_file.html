@@ -3,6 +3,7 @@
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.542">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Vinicius Aquino">
@@ -142,7 +143,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="resumo">Resumo:</h2>
 <p>O presente texto é uma introdução aos modelos Gradient Boosting para séries temporais. Nele foram apresentados a classe de modelos de regressão não paramétrica Gradient Boosting Decision Tree (GBDT) e o XGBoost, uma subclasse dos modelos GBDT. Por fim, foi aplicado o XGBoost no contexto de séries temporais. O texto foi construído sob conceitos não tão difundidos no contexto de Machine Learning, como regressões não paramétricas, a fim de que o leitor possa generalizar para outros modelos, como KNN, LightGBM, Random Forest etc.</p>
 <p>Pacotes usados:</p>
-<div id="662e46c3" class="cell" data-execution_count="1">
+<div id="ff64eabc" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats <span class="im">as</span> st</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -176,7 +177,7 @@ window.Quarto = {
 <p>Isso é, a primeira árvore é treinada com os dados. A segunda com os resíduos que essa primeira árvore deixou. A terceira com os resíduos da segunda e assim sucessivamente. É um processo iterativo.</p>
 <p>Um exemplo abaixo inspirado no livro Mãos à Obra: Aprendizado de Máquina com Scikit-Learn &amp; TensorFlow:</p>
 <p>Gerando dados aleatórios:</p>
-<div id="b9b91f8c" class="cell" data-execution_count="2">
+<div id="c4ffa782" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">633</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.random.uniform(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">100</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> X <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">5</span> <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">100</span>)</span>
@@ -195,7 +196,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Treinando um GBDT (árvores em sequência):</p>
-<div id="e753c752" class="cell" data-execution_count="3">
+<div id="fd734bbf" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>tree_1 <span class="op">=</span> DecisionTreeRegressor(max_depth<span class="op">=</span><span class="dv">3</span>).fit(X, y)</span>
@@ -219,12 +220,12 @@ window.Quarto = {
 <p><span class="math display">\[y_{i} = r(x_{i}) + \epsilon_{i} = \sum^{q}_{i=1}tree_{i}(x_i) + \epsilon_{i}\]</span></p>
 <p>Onde cada árvore <span class="math inline">\(tree_i\)</span> foi treinada em paralelo.</p>
 <p>Em python, o modelo treinado acima seria dado como:</p>
-<div id="934b5c20" class="cell" data-execution_count="4">
+<div id="986c38ea" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x_space <span class="op">=</span> np.arange(<span class="op">-</span><span class="dv">5</span>, <span class="dv">6</span>).reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> <span class="bu">sum</span>(tree.predict(x_space) <span class="cf">for</span> tree <span class="kw">in</span> (tree_1, tree_2, tree_3))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Visualizando o modelo:</p>
-<div id="58ad5b26" class="cell" data-execution_count="5">
+<div id="06e6d304" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ax.scatter(x<span class="op">=</span>X, </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>           y<span class="op">=</span>y, </span>
@@ -252,7 +253,7 @@ window.Quarto = {
 <section id="baixando-os-dados" class="level3">
 <h3 class="anchored" data-anchor-id="baixando-os-dados">Baixando os dados:</h3>
 <p>Os dados da venda de cerveja no USA podem ser acessados diretamente deste link do github <a href="https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv">aqui</a>.</p>
-<div id="9f30aaaf" class="cell" data-execution_count="7">
+<div id="97cdb084" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(path, parse_dates<span class="op">=</span>[<span class="st">'date'</span>], index_col<span class="op">=</span>[<span class="st">'date'</span>])</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.tail())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -266,7 +267,7 @@ date
 2018-12-01  6370</code></pre>
 </div>
 </div>
-<div id="200d5258" class="cell" data-execution_count="8">
+<div id="35fa0f86" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.plot(df.beer, <span class="st">'k'</span>)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Beer Sales"</span>)</span>
@@ -283,7 +284,7 @@ date
 <section id="metodologia" class="level3">
 <h3 class="anchored" data-anchor-id="metodologia">Metodologia:</h3>
 <p>A idéia da análise é fazer um comparativo de desempenho conforme se aumenta a sofisticação do XGBoost. Serão feitas validações cruzadas onde o objetivo do modelo será prever a demanda total do ano posterior. Serão usados 72 meses para prever a demanda dos próximos 12, como pode ser visto abaixo:</p>
-<div id="57bb155a" class="cell" data-execution_count="9">
+<div id="b9b95f25" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> SlidingWindowForecastCV(step<span class="op">=</span><span class="dv">12</span>, </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                             h<span class="op">=</span><span class="dv">12</span>, </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                             window_size<span class="op">=</span><span class="dv">72</span>)</span>
@@ -317,7 +318,7 @@ date
 <p>Dessa forma, espera-se que o desempenho de cada modelo tenha uma distribuição binomial de média <span class="math inline">\(0.5n\)</span> nos n testes. Se for observado um valor que faça sentido a luz dessa hipótese, então os modelos tem performance similar.</p>
 <p>Do contrário, rejeita-se a hipótese.</p>
 <p>Aqui, uma função em python que executa o teste e retorna um print() para melhor entendimento do usuário.</p>
-<div id="0422396b" class="cell" data-execution_count="10">
+<div id="910a3e21" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test(a, b, alpha <span class="op">=</span> <span class="fl">.05</span>):</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(a)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    a_venceu <span class="op">=</span> (a<span class="op">&gt;</span>b).<span class="bu">sum</span>()</span>
@@ -350,9 +351,9 @@ date
 <section id="modelando-a-tendência" class="level3">
 <h3 class="anchored" data-anchor-id="modelando-a-tendência">Modelando a Tendência:</h3>
 <p>É bem nítido que há uma tendência na série. Isso é, intrisicamente no Processo Estocástico (PE) gerador da série há alguma função do tempo que, sistematicamente, soma algum incremento na série, multiplique ela por um fator &gt; 1 ou faça ambos ao mesmo tempo.</p>
-<div id="cdd1967f" class="cell" data-execution_count="11">
+<div id="4a568f1d" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-stderr">
-<pre><code>C:\Users\vinicius.aquino@grupoboticario.com.br\AppData\Local\Temp\ipykernel_18988\3063308096.py:2: FutureWarning: 'Y' is deprecated and will be removed in a future version, please use 'YE' instead.
+<pre><code>C:\Users\vinicius.aquino@grupoboticario.com.br\AppData\Local\Temp\ipykernel_22996\3063308096.py:2: FutureWarning: 'Y' is deprecated and will be removed in a future version, please use 'YE' instead.
   plt.plot(df.beer.resample('1Y').sum(), 'k')</code></pre>
 </div>
 <div class="cell-output cell-output-display">
@@ -367,7 +368,7 @@ date
 <p><span class="math display">\[y_{t} = \beta_{0} + \beta_{trend}t\]</span></p>
 <p>A interpretação dos parâmetros <span class="math inline">\(\beta_{0}\)</span> e <span class="math inline">\(\beta_{1}\)</span> é bem intuitiva. Como o input é o ano, o <span class="math inline">\(\beta_{1}\)</span> é a variação da demanda ano a ano e o <span class="math inline">\(\beta_{0}\)</span> seria a “demanda inicial” no ano 0 (não faz muito sentido mesmo, mas tratando de interceptos isso é bem comum). No caso, não tem como saber exatamente como será o modelo do XGBoost e a vantagem dessa classe de modelos é exatamente essa. Por se tratar de uma regressão não paramétrica, ele encontrará, nos dados, a melhor forma de descrever essa tendência em função do tempo.</p>
 <p>Criando uma função para automatizar o processo de data featuring para a tendência:</p>
-<div id="bf239ccf" class="cell" data-execution_count="12">
+<div id="5e8055e8" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> data_featuring_trend(df):</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> df.copy()</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    X.loc[:, <span class="st">'year'</span>] <span class="op">=</span> [i.year <span class="cf">for</span> i <span class="kw">in</span> X.index]</span>
@@ -376,7 +377,7 @@ date
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                   axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Criando o modelo para os 21 backtest:</p>
-<div id="bb286592" class="cell" data-execution_count="13">
+<div id="c6ecbcb7" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(<span class="bu">list</span>(cv.split(df)))</span>
@@ -433,7 +434,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 </div>
 </div>
 <p>Como pode ser visto, o XGBoost perfoma acima da regressão linear em somente 5 de 21 casos (23%). Será que a regressão realmente performa acima ou esse valor pode ter vindo do acaso? Bom, testa-se a hipótese de que a regressão linear tem probabilidade 50% de vencer o XGBoost.</p>
-<div id="c7d12166" class="cell" data-execution_count="14">
+<div id="1df1d45e" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -442,7 +443,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 </div>
 </div>
 </div>
-<div id="1d7a9e23" class="cell" data-execution_count="15">
+<div id="f6925a41" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>test(a <span class="op">=</span> acc_reg_1,</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>     b <span class="op">=</span> acc_xgb_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -457,7 +458,7 @@ p valor:  0.013</code></pre>
 <p>Hipótese rejeitada. Isso significa que, sim, pode-se afirmar que a regressão produz uma acurácia maior que o XGBoost. A probabilidade dela não ser maior e ser observada esse placar ou um mais raro é somente 1.3%.</p>
 <p>O ponto agora é discutir a natureza desses resultados. Afinal, o que a regressão linear entendeu que o XgBoost não entendeu? O que pode explicar esse melhor desempenho do modelo mais simples?</p>
 <p>Para responder essa questão, o próximo passo é explorar pelo menos o último modelo treinado e entender o que aconteceu. Fazendo um gráfico de dispersão das observações da série em termos das variáveis de entrada (somente o ano):</p>
-<div id="307acf4c" class="cell" data-execution_count="16">
+<div id="4ad83a35" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -466,7 +467,7 @@ p valor:  0.013</code></pre>
 </div>
 </div>
 </div>
-<div id="b9700aa9" class="cell" data-execution_count="17">
+<div id="54f91293" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -485,7 +486,7 @@ p valor:  0.013</code></pre>
 <section id="modelando-a-sazonalidade" class="level3">
 <h3 class="anchored" data-anchor-id="modelando-a-sazonalidade">Modelando a Sazonalidade:</h3>
 <p>A série tem um claro fator sazonal que pode ser observado na vizualização abaixo:</p>
-<div id="bb70f35a" class="cell" data-execution_count="18">
+<div id="3e132afd" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -499,7 +500,7 @@ p valor:  0.013</code></pre>
 <p>Onde as variáveis <span class="math inline">\(x_{k}'s\)</span> são variáveis binárias que correspondem ao mês. Isso é, <span class="math inline">\(x_{jan}\)</span> vale 1 se o mês for janeiro, 0 caso contrário. E, portanto, <span class="math inline">\(\beta_{jan}\)</span> é o “prêmio” que se soma a demanda por ser janeiro, podendo ser positivo ou não. O input da regressão linear DEVE ser feito via variáveis dummies, dado que o mês é uma variável qualitativa nominal e o modelo é linear.</p>
 <p>Novamente, não é possível saber como o XGBoost vai ser interpretado, dado que trata-se de uma regressão não paramétrica. O input da sazonalidade PODE ser dado como se o mês fosse uma variável numérica, dado que o modelo é baseado em árvores de decisão e conseguiria “captar” o movimento da sazonalidade.</p>
 <p>Criando funções que adicionam variáveis de sazonalidade:</p>
-<div id="d9064a7b" class="cell" data-execution_count="19">
+<div id="84d54b56" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> data_featuring_sazo(df: pd.DataFrame) <span class="op">-&gt;</span> pd.DataFrame:</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> df.copy()</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    X.loc[:, <span class="st">'year'</span>] <span class="op">=</span> [i.year <span class="cf">for</span> i <span class="kw">in</span> X.index]</span>
@@ -512,7 +513,7 @@ p valor:  0.013</code></pre>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>                    axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Vizualizando quais seriam os inputs:</p>
-<div id="19405e21" class="cell" data-execution_count="20">
+<div id="50d13147" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data_featuring_sazo(df.iloc[<span class="op">-</span><span class="dv">12</span>:]).reset_index(drop<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    year      1      2      3      4      5      6      7      8      9  \
@@ -545,7 +546,7 @@ p valor:  0.013</code></pre>
 </div>
 </div>
 <p>Criando o modelo para os 21 backtest:</p>
-<div id="26047fc5" class="cell" data-execution_count="21">
+<div id="079e0149" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(<span class="bu">list</span>(cv.split(df)))</span>
@@ -602,7 +603,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 </div>
 </div>
 <p>E o XGBoost segue performando ABAIXO da regressão linear. Dando uma explorada na forma com que ele lidou com os dados:</p>
-<div id="d6343d78" class="cell" data-execution_count="22">
+<div id="881cd39c" class="cell" data-execution_count="22">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -615,7 +616,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 <p>O XGBoost nadou de braçada em treino, sequer é possível ver a linha dos dados em treino. No entanto, em teste ele subestimou a demanda. E isso se deve, novamente ao problema da extrapolação no espaço da covariáveis ano.</p>
 <p>Analizando previsão sob as covariáveis:</p>
 <p>Nas covariáveis de tendência:</p>
-<div id="eac0a43c" class="cell" data-execution_count="23">
+<div id="3960b6e2" class="cell" data-execution_count="23">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -625,7 +626,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 </div>
 </div>
 <p>Nas covariáveis de sazonalidade:</p>
-<div id="a553aabe" class="cell" data-execution_count="24">
+<div id="1026b6c5" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> year <span class="kw">in</span> y_train.index.year.unique():</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    df_temp <span class="op">=</span> y_train.loc[y_train.index.year <span class="op">==</span> year]</span>
@@ -653,7 +654,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 <section id="removendo-tendência" class="level3">
 <h3 class="anchored" data-anchor-id="removendo-tendência">Removendo Tendência:</h3>
 <p>Será feito uma transformação na variável <span class="math inline">\(y_{t}\)</span> a fim de que a previsão dela seja “facilitada” para os modelos.</p>
-<div id="0c6cef90" class="cell" data-execution_count="25">
+<div id="03ee7cf1" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>ax.plot(df.diff().dropna()[<span class="st">'beer'</span>], <span class="st">'k'</span>)</span>
@@ -668,7 +669,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 </div>
 </div>
 <p>A série continua, ainda, não estacionária, posto que sua variância aumenta em função do tempo. A gente pode remover essa heterocedasticidade usando o logaritmo da série (e o derivando, dado que ele também não é estacionário):</p>
-<div id="2d6bcc39" class="cell" data-execution_count="26">
+<div id="e4baec91" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>ax.plot((np.log(df[<span class="st">'beer'</span>])).diff().dropna(), <span class="st">'k'</span>)</span>
@@ -683,7 +684,7 @@ regressão vence: 16 (76.19 %)</code></pre>
 </div>
 </div>
 <p>Neste caso, a série passa a se comportar de forma estacionária. Rodando os modelos novamente:</p>
-<div id="748e304e" class="cell" data-execution_count="27">
+<div id="9029c621" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(<span class="bu">list</span>(cv.split(df)))</span>
@@ -757,7 +758,7 @@ regressão vence: 9 (42.86 %)</code></pre>
 </div>
 </div>
 <p>E o jogo virou! O XGBoost performa melhor 17 vezes, contra 4 da regressão linear. Será que vencer 81% de 21 duelos é o bastante para dizer que ele é melhor? Bom, é uma hipótese que pode ser testada.</p>
-<div id="7de60fc1" class="cell" data-execution_count="28">
+<div id="fb135ee7" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#echo: True</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -781,7 +782,7 @@ regressão vence: 9 (42.86 %)</code></pre>
 </div>
 </div>
 </div>
-<div id="56bd3a3a" class="cell" data-execution_count="29">
+<div id="6ae5e747" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>test(a<span class="op">=</span>acc_xgb_3,</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>     b<span class="op">=</span>acc_reg_3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -795,7 +796,7 @@ p valor:  0.332</code></pre>
 </div>
 <p>Observa-se um p-valor de 33%. Isso é, apesar de ter performado acima da Regressão Linear, não há evidências para dizermos que o XGBoost é melhor do que a Regressão. O que, em termos práticos, quer dizer que para esse dataset, uma regressão linear vai ter performance similar a regressões não paramétricas. O XGBoost pode, ainda, ganhar algumas covariáveis, defasagens e etc. De todo jeito, é um bom modelo a ter na caixa de ferramentas de cientista de dados.</p>
 <p>A título de comparação, abaixo é possível ver a performance dos 3 XGBoost treinados ao longo do texto:</p>
-<div id="d1e77674" class="cell" data-execution_count="30">
+<div id="65e5e48c" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#echo: True</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>f, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -822,7 +823,7 @@ p valor:  0.332</code></pre>
 </div>
 </div>
 <p>Ficando nítido o ganho de performance com o tratamento da tendência. Vizualizando o último modelo vindo da escala log pra ver como está “visualmente” o modelo:</p>
-<div id="2894e90f" class="cell" data-execution_count="31">
+<div id="397df4e8" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> df.iloc[index[<span class="dv">0</span>]].copy()</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> df.iloc[index[<span class="dv">1</span>]].copy()</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
