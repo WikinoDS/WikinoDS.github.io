@@ -2,6 +2,7 @@
 title: "Gradient Boosting Aplicado à Séries Temporais"
 format: html
 author: "Vinicius Aquino"
+date: now
 ---
 
 ## Resumo:
