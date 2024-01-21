@@ -59,15 +59,14 @@
                   projects[path[1]] = []
                                                                                                       }
                 if (path[0] === "projects" && path[path.length -1] === 'qmd_file.html' && path.length > 2 && !projects[path[1]].includes(path[2])) {                  
-                  projects[path[1]] = []
                   var currentDir = path
                   currentDir.pop()
                   currentDir = currentDir.toString().replaceAll(",", "/")
-                  console.log(currentDir)
+                  console.log("./" +currentDir)
 
 //                  currentDir = "https://wikinods.github.io/projects/Conte%C3%BAdos%20Pr%C3%B3prios/Gradient%20Boosting%20com%20XGBoost%20Aplicado%20%C3%A0%20S%C3%A9ries%20Temporais/qmd_file.html"
                   
-                  fetch(currentDir)
+                  fetch("./" + currentDir)
                                   .then(function (response) {
                                       if (response.ok) {
                                           return response.text();} 
