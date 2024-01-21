@@ -36,23 +36,12 @@
   <section id="main-content">
 
     <div id="project-block">
-      <!-- BLOCK NAME -->
-      <div class="text-intro">
-        <h3>_project_class_name_</h3>
-      </div>
-
-      <!-- BLOCK PROJECTS -->
-      <div class="columns features" id="projects-of-project-block">
-        
-        <div class="one-third" id="column-project">
-          <a href="./projects/_project_class_name_/_project_name_/index.html">
-            <div class="book-project">
-              <img class="book-cover" src="./projects/_project_class_name_/_project_name_/cover.jpg">
-              <h3 id="project-name">_project_name_</h3>            
-            </div>
-          </a>
-        </div>
-      </div>
+      <table style="width:100%" id="table-projects">
+        <tr>
+          <th>Name</th>
+          <th>Class</th>
+          <th>Last Update</th>
+        </tr>
     </div>
 
 
@@ -69,37 +58,51 @@
                 if (path[0] === "projects" && path.length == 2 && !projects.hasOwnProperty(path[1])) {                  
                   projects[path[1]] = []
                                                                                                       }
-                if (path[0] === "projects" && path.length > 2 && !projects[path[1]].includes(path[2])) {                  
-                  projects[path[1]].push(path[2])                                                                                                      }            
+                if (path[0] === "projects" && path[path.length -1] === 'qmd_file.html' && path.length > 2 && !projects[path[1]].includes(path[2])) {                  
+                  projects[path[1]] = []
+                  var currentDir = path
+                  currentDir.pop()
+                  currentDir = currentDir.toString().replaceAll(",", "/")
+                  console.log(currentDir)
+
+//                  currentDir = "https://wikinods.github.io/projects/Conte%C3%BAdos%20Pr%C3%B3prios/Gradient%20Boosting%20com%20XGBoost%20Aplicado%20%C3%A0%20S%C3%A9ries%20Temporais/qmd_file.html"
+                  
+                  fetch(currentDir)
+                                  .then(function (response) {
+                                      if (response.ok) {
+                                          return response.text();} 
+                                      else {
+                                          throw new Error('Network response was not ok');}
+                                                              })
+
+                                  .then(function (html) {  
+                                      const parser = new DOMParser();
+                                      const parsedDocument = parser.parseFromString(html, 'text/html');
+                                      
+                                      const text_name = parsedDocument.getElementsByTagName("title")[0].text
+                                      const metas = parsedDocument.getElementsByTagName("meta")
+                                      var date = ""
+
+                                      for (let i = 0; i < metas.length; i++) {
+                                            if (metas[i].getAttribute('name') === "dcterms.date") {
+                                              date = metas[i].getAttribute('content');
                                             }
+                                          }   
+                                      
+                                      var table = document.getElementById("table-projects");
+                                      var row = table.insertRow(-1);
+                                      
+                                      var cell_1 = row.insertCell(0);
+                                      var cell_2 = row.insertCell(1);
+                                      var cell_3 = row.insertCell(2);
 
-            var div_main = ''        
-
-            for (const project_class in projects) {
-              
-              
-              var div_str = `<div id="project-block">
-                             <!-- BLOCK NAME -->
-                                <div class="text-intro">
-                                  <h3>_project_class_name_</h3>
-                                </div>
-                            `.replace('_project_class_name_', project_class + ":")
-
-              for (const project_name of projects[project_class]){                  
-                  var div_project = document.getElementById("projects-of-project-block").innerHTML                                     
-                  div_project = div_project.replaceAll('_project_class_name_', project_class).replaceAll('_project_name_', project_name)           
-                  div_str = div_str + div_project
-               }
-
-              div_str = div_str + `
-              </div>` 
-
-              div_main = div_main + div_str
-            }
-
-            document.getElementById("main-content").innerHTML = div_main
-            
-              
+                                      cell_1.innerHTML = `<a href="./projects/${path[1]}/${path[2]}/index.html">${text_name}</a>`
+                                      cell_2.innerHTML = path[1]
+                                      cell_3.innerHTML = date                    
+                                                                })                              
+                  
+                }                                    
+                }
 
           }
 
