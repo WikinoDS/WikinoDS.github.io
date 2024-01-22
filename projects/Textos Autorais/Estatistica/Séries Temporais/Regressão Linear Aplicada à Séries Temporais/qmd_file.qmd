@@ -2,6 +2,7 @@
 title: "Regressão Linear Aplicada à Séries Temporais com Python"
 format: html
 author: Vinicius Aquino
+date: now
 ---
 
 # Resumo
@@ -203,7 +204,7 @@ df_sazo = pd.get_dummies(
                          )                        
 
 df_train = pd.concat([df_train.reset_index(drop=True), 
-                      df_sazo], axis=1)
+                      df_sazo], axis=1).astype(int)
 
 
 df_train.head()
@@ -242,11 +243,11 @@ df_sazo_predict = pd.get_dummies(
                                 pd.DataFrame({"mes_": [i.month for i in df.index[n:n+h]]}),
                                 columns=['mes_'],
                                 prefix="mes_"
-                                )   
+                                ).astype(int)     
 
 input_predict_sazo = pd.concat([input_predict,
                                 df_sazo_predict],
-                                axis=1)                                                   
+                                axis=1)                                                 
 
 predict_model_1_sazo = results_1_sazo.predict(input_predict_sazo)
 # Lembrando que o modelo enxerga o logaritimo, por isso o exp
@@ -387,7 +388,7 @@ df_cv.columns = ['y']
 df_cv['b0'] = 1
 df_cv['b1'] = np.arange(len(df_cv))
 
-dummies_sazo = pd.get_dummies(pd.DataFrame({"mes": df_cv.index.month}), columns=["mes"])
+dummies_sazo = pd.get_dummies(pd.DataFrame({"mes": df_cv.index.month}), columns=["mes"]).astype(int)
 df_cv = pd.concat([df_cv.reset_index(drop=True), 
                    dummies_sazo], axis=1)
 
