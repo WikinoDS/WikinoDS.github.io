@@ -2,11 +2,31 @@
 title: "Gradient Boosting Aplicado à Séries Temporais"
 format: html
 author: "Vinicius Aquino"
+code-block-border-left: true
+theme: flatly
 date: now
 
 ---
 
-## Resumo:
+
+## Sumário: {#sec-sumario}
+
+&ensp;  [Sumário -@sec-sumario] <br>
+&ensp;  [Resumo -@sec-resumo] <br>
+&ensp;  [Definição do Modelo -@sec-definicao-modelo] <br>
+&ensp; &ensp;  [Regressão Não Paramétrica -@sec-definicao-modelo-reg-nao-par] <br>
+&ensp; &ensp;  [Gradient Boosting Decision Tree (GBDT) -@sec-definicao-modelo-gbdt] <br>
+&ensp;  [Modelando -@sec-modelando] <br>
+&ensp; &ensp;  [Baixando Dados -@sec-modelando-baixando-dados] <br>
+&ensp; &ensp;  [Metodologia -@sec-metodologia] <br>
+&ensp; &ensp;  [Modelando Tendência -@sec-modelando-tend] <br>
+&ensp; &ensp;  [Modelando Sazonalidade -@sec-modelando-sazo] <br>
+&ensp; &ensp;  [Removendo Tendência -@sec-modelando-removendo-tend] <br>
+&ensp;  [Comentários Finais -@sec-comentarios-finais] <br>
+&ensp;  [Principais Fontes -@sec-principais-fontes] <br>
+
+
+## Resumo: {#sec-resumo}
 
 O presente texto é uma introdução aos modelos Gradient Boosting para séries temporais. Nele foram apresentados a classe de modelos de regressão não paramétrica Gradient Boosting Decision Tree (GBDT) e o XGBoost, uma subclasse dos modelos GBDT. Por fim, foi aplicado o XGBoost no contexto de séries temporais. O texto foi construído sob conceitos não tão difundidos no contexto de Machine Learning, como regressões não paramétricas, a fim de que o leitor possa generalizar para outros modelos, como KNN, LightGBM, Random Forest etc.
 
@@ -29,9 +49,9 @@ plt.style.use('ggplot')
 ```
 
 
-## Definição do Modelo:
+## Definição do Modelo: {#sec-definicao-modelo}
 
-### Regressão Não Paramétrica:
+### Regressão Não Paramétrica: {#sec-definicao-modelo-reg-nao-par}
 
 Modelos da classe Gradient Boosting fazem parte de uma classe maior de modelos definida como regressão não paramétrica. Assim como modelos de regressão linear, essa é uma classe de modelo onde se usa variáveis explanatórias X para predizer uma quantidade da variável y, no geral a média.
 
@@ -45,11 +65,11 @@ No caso, já dando um spoiler, as funções $r(x_{i})$ serão construídas a par
 
 São exemplos de modelos de regressão Não linear: o algoritmo KNN, Random Forest, Suavização por Splines, Árvores de regressão etc.
 
-### Gradient Boosting Decision Tree:
+### Gradient Boosting Decision Tree: {#sec-definicao-modelo-gbdt}
 
 Nesta lógica de se ter um estimador para a esperança de y a partir de covariáveis X, nasce os algoritmos Gradient Boosting Decision Tree (GBDT). Como o nome sugere, eles são baseados em árvores de decisão. Diferente do Random Forest, os algoritmos GBDT não usam as árvores de decisão em paralelo. Explica-se.
 
-No Random Forest, se tem várias árvores distintas vindas de reamostragens aleatórias de um conjunto de dados, onde a previsão é a média de todas as árvores juntas. No caso dos algoritmos GBDT é usado o processo de “Bosting”, onde se treina sequencialmente novas árvores de decisão que corrigem os erros das anteriores.
+No Random Forest se tem várias árvores distintas vindas de reamostragens aleatórias de um conjunto de dados, onde a previsão é a média de todas as árvores juntas. No caso dos algoritmos GBDT é usado o processo de “Bosting”, onde se treina sequencialmente novas árvores de decisão que corrigem os erros das anteriores.
 
 Isso é, a primeira árvore é treinada com os dados. A segunda com os resíduos que essa primeira árvore deixou. A terceira com os resíduos da segunda e assim sucessivamente. É um processo iterativo.
 
@@ -66,6 +86,7 @@ f, ax = plt.subplots(figsize=(8, 5))
 ax.scatter(x=X, 
            y=y, 
            color='k')
+plt.title("Gradient Boosting Decision Tree")           
 plt.show()
 ```
 
@@ -106,7 +127,7 @@ Ou seja, a previsão da i-esima observação $y_{i}$ é a soma das previsões da
 
 $$y_{i} = r(x_{i}) + \epsilon_{i} = \sum^{q}_{i=1}tree_{i}(x_i) + \epsilon_{i}$$
 
-Onde cada árvore $tree_i$ foi treinada em paralelo.
+Onde cada árvore $tree_i$ foi treinada sequencialmente.
 
 Em python, o modelo treinado acima seria dado como:
 
@@ -126,18 +147,19 @@ ax.plot(x_space, y_pred, label="GBDT")
 plt.plot(x_space, x_space ** 2 + 5, label="Modelo Gerador")
 
 plt.legend()
+plt.title("Gradient Boosting Decision Tree") 
 plt.show()
 ```
 
 Novamente, é válido reforçar: ninguém está preocupado se o erro padrão dos nós destas árvores tem distribuição normal, são não-viesados, assintóticos etc. Por isso trata-se de uma regressão não paramétrica.
 
-O game change a partir de agora será como é adicionado estas árvores e como elas são modeladas. E é aí que vai residir a diferença entre o XGBoost e o LightGBM. No geral, a diferença vai ser de performance, mas é válido um estudo nos hiper-parâmetros destes modelos, afim de entender como eles se comportam.
+O game change a partir de agora será como é adicionado estas árvores e como elas são modeladas. E é aí que vai residir a diferença entre o XGBoost e o LightGBM. No geral, a diferença vai ser de performance computacional e de estratégia da construção destas árvores.
 
 A partir de agora se usará o XGBoost sem tunagem de hiper-parâmetros, dado que a idéia é apenas entender sua aplicação em séries temporais.
 
-## Modelando: XGBoost vs Regressão Linear para Previsão de Demanda
+## Modelando: XGBoost vs Regressão Linear para Previsão de Demanda {#sec-modelando}
 
-### Baixando os dados:
+### Baixando os dados: {#sec-modelando-baixando-dados}
 
 Os dados da venda de cerveja no USA podem ser acessados diretamente deste link do github <a href="https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv">aqui</a>.
 
@@ -159,7 +181,7 @@ plt.title("Beer Sales")
 plt.show()
 ```
 
-### Metodologia:
+### Metodologia: {#sec-metodologia}
 
 A idéia da análise é fazer um comparativo de desempenho conforme se aumenta a sofisticação do XGBoost. Serão feitas validações cruzadas onde o objetivo do modelo será prever a demanda total do ano posterior. Serão usados 72 meses para prever a demanda dos próximos 12, como pode ser visto abaixo:
 
@@ -228,7 +250,7 @@ def test(a, b, alpha = .05):
 
 Esse teste supõe que as amostras são independentes, o que não é bem verdade, uma vez que o mesmo ano será usado até 6x para treino. De toda forma, será um bom norte.
 
-### Modelando a Tendência:
+### Modelando a Tendência:  {#sec-modelando-tend}
 
 É bem nítido que há uma tendência na série. Isso é, intrisicamente no Processo Estocástico (PE) gerador da série há alguma função do tempo que, sistematicamente, soma algum incremento na série, multiplique ela por um fator > 1 ou faça ambos ao mesmo tempo.
 
@@ -240,7 +262,7 @@ plt.title("Beer Sales (by Year)")
 plt.show()
 ```
 
-Por uma questão de simplicidade de modelo, será usado uma relação linear para descrever essa suposta função. Nesse caso, a abordagem da regressão linear não será como a descrita no texto Regressão Linear Aplicada à Séries Temporais (mais "mecanística"), mas será tal qual é usada nos modelos de machine learning no contexto de séries temporais. O modelo da demanda no caso da regressão linear será:
+Por uma questão de simplicidade de modelo, será usado uma relação linear para descrever essa suposta função. Nesse caso, a abordagem da regressão linear não será como a descrita no texto <a href="https://wikinods.github.io/projects/Textos%20Autorais/Estatistica/S%C3%A9ries%20Temporais/Regress%C3%A3o%20Linear%20Aplicada%20%C3%A0%20S%C3%A9ries%20Temporais/index.html">Regressão Linear Aplicada à Séries Temporais</a> (mais "mecanística"), mas será tal qual é usada nos modelos de machine learning no contexto de séries temporais. O modelo da demanda no caso da regressão linear será:
 
 $$y_{t} = \beta_{0} + \beta_{trend}t$$
 
@@ -373,11 +395,11 @@ Na verdade, regressões, no geral, sem qualquer exceção, têm esse problema de
 
 Analisando as nuances do teste, o que foi feito, em termos práticos, foi ensinar um modelo o padrão da venda de cerveja entre os inputs de 2012 a 2017. No entanto, o que foi exigido foi prever como vai ser essa venda em 2018. Parece até sacanagem com o coitado. De fato, ele entendeu a demanda entre 2012 e 2017, mas a falta de observações do futuro não permitiu ele entender o seu comportamento.
 
-Entendido o porquê o XGBoost performou tão mal, fica, portanto, entendido que ele deve ser descartado, posto que em todos os problemas de séries temporais ter-se-á essa necessidade de extrapolação? A resposta é não. Tem como contornar esse problema, inclusive, aplicando metodologias inspiradas nos modelos clássicos de séries temporais, como remoção de tendência diferenciando a série.
+Entendido o porquê o XGBoost performou tão mal, fica, portanto, entendido que ele deve ser descartado, posto que em todos os problemas de séries temporais haverá essa necessidade de extrapolação? A resposta é não. Tem como contornar esse problema, inclusive, aplicando metodologias inspiradas nos modelos clássicos de séries temporais, como remoção de tendência diferenciando a série.
 
 Por hora, fica no radar essa eventual limitação no que tange ao intervalo de predição.
 
-### Modelando a Sazonalidade:
+### Modelando a Sazonalidade: {#sec-modelando-sazo}
 
 A série tem um claro fator sazonal que pode ser observado na vizualização abaixo:
 
@@ -396,11 +418,11 @@ plt.show()
 
 E, agora, que já há uma previsão da tendência, o próximo passo é saber o quanto a demanda vai variar em cada mês em relação ao “nível” médio anual. Dessa forma, o modelo de regressão linear ganha essa cara:
 
-$$y_{t} = \beta_{0} + \beta_{trend}t + \beta_{jan}x_{jan} + \beta_{fev}x_{fev}+ ... + \beta_{dez}x_{dez}$$
+$$y_{t} = \beta_{0} + \beta_{trend}t + \beta_{jan}x_{jan} + \beta_{fev}x_{fev}+ ... + \beta_{nov}x_{nov}$$
 
-Onde as variáveis $x_{k}'s$ são variáveis binárias que correspondem ao mês. Isso é, $x_{jan}$ vale 1 se o mês for janeiro, 0 caso contrário. E, portanto, $\beta_{jan}$ é o “prêmio” que se soma a demanda por ser janeiro, podendo ser positivo ou não. O input da regressão linear DEVE ser feito via variáveis dummies, dado que o mês é uma variável qualitativa nominal e o modelo é linear.
+Onde as variáveis $x_{k}'s$ são variáveis binárias que correspondem ao mês. Isso é, $x_{jan}$ vale 1 se o mês for janeiro, 0 caso contrário. E, portanto, $\beta_{jan}$ é o “prêmio” que se soma a demanda por ser janeiro, podendo ser positivo ou não. O input da regressão linear DEVE ser feito via variáveis dummies, dado que o mês é uma variável qualitativa nominal e o modelo é linear. Não há dezembro nas variáveis dummies por uma questão de multicolinearidade (o intercepto seria uma relação lienar perfeita de todas as variáveis de sazonalidade).
 
-Novamente, não é possível saber como o XGBoost vai ser interpretado, dado que trata-se de uma regressão não paramétrica. O input da sazonalidade PODE ser dado como se o mês fosse uma variável numérica, dado que o modelo é baseado em árvores de decisão e conseguiria “captar” o movimento da sazonalidade.
+Novamente, não é possível saber como o XGBoost vai ser interpretado, dado que trata-se de uma regressão não paramétrica. O input da sazonalidade PODE ser dado como se o mês fosse uma variável numérica, dado que o modelo é baseado em árvores de decisão e conseguiria “captar” o movimento da sazonalidade. No entanto, será usado, também, variáveis dummies.
 
 Criando funções que adicionam variáveis de sazonalidade:
 
@@ -413,8 +435,8 @@ def data_featuring_sazo(df: pd.DataFrame) -> pd.DataFrame:
     X_sazo = pd.get_dummies(X['month'])
     X = pd.concat([X, X_sazo], axis=1)
 
-    return X.drop(labels=['month', 'beer'],
-                    axis=1)
+    return X.drop(labels=['month', 'beer', 12],
+                    axis=1).astype('int')
 ```
 
 Vizualizando quais seriam os inputs:
@@ -540,7 +562,7 @@ plt.show()
 
 É percepitível que o XGBoost pegou bem o padrão sazonal, no entanto, erra em acertar o nível (tendência). Novamente o problema citado na seção anterior.
 
-### Removendo Tendência:
+### Removendo Tendência: {#sec-modelando-removendo-tend}
 
 Será feito uma transformação na variável $y_{t}$ a fim de que a previsão dela seja “facilitada” para os modelos.
 
@@ -623,7 +645,7 @@ print()
 print(f"regressão vence: {(acc_xgb_3<acc_reg_3).sum()} ({round(100*(acc_xgb_3<acc_reg_3).sum()/n, 2)} %)")
 ```
 
-E o jogo virou! O XGBoost performa melhor 17 vezes, contra 4 da regressão linear. Será que vencer 81% de 21 duelos é o bastante para dizer que ele é melhor? Bom, é uma hipótese que pode ser testada.
+E o jogo virou! O XGBoost performa melhor 12 vezes, contra 9 da regressão linear. Será que vencer 57% de 21 duelos é o bastante para dizer que ele é melhor? Bom, é uma hipótese que pode ser testada.
 
 ```{python}
 #echo: True
@@ -649,7 +671,9 @@ test(a=acc_xgb_3,
      b=acc_reg_3)
 ```
 
-Observa-se um p-valor de 33%. Isso é, apesar de ter performado acima da Regressão Linear, não há evidências para dizermos que o XGBoost é melhor do que a Regressão. O que, em termos práticos, quer dizer que para esse dataset, uma regressão linear vai ter performance similar a regressões não paramétricas. O XGBoost pode, ainda, ganhar algumas covariáveis, defasagens e etc. De todo jeito, é um bom modelo a ter na caixa de ferramentas de cientista de dados.
+Observa-se um p-valor de 33%. Isso é, apesar de ter performado acima da Regressão Linear, não há evidências para dizermos que o XGBoost é melhor do que a Regressão e que essse resultado não é por acaso. 
+
+O que, em termos práticos, quer dizer que para esse dataset, uma regressão linear vai ter performance similar a regressões não paramétricas. O XGBoost pode, ainda, ganhar algumas covariáveis, defasagens e etc. mas aí, para ser justos, teríamos que colocar ele para competir com um SARIMA. De todo jeito, é um bom modelo a ter na caixa de ferramentas de cientista de dados.
 
 A título de comparação, abaixo é possível ver a performance dos 3 XGBoost treinados ao longo do texto:
 
@@ -678,7 +702,6 @@ Ficando nítido o ganho de performance com o tratamento da tendência. Vizualiza
 
 ```{python}
 #| echo: True
-#| 
 
 y_train = df.iloc[index[0]].copy()
 y_test = df.iloc[index[1]].copy()
@@ -697,16 +720,19 @@ plt.show()
 
 Agora, sim, com "carinha" de modelo de série temporal.
 
-## Comentários Finais:
+## Comentários Finais: {#sec-comentarios-finais}
 
 Recapitulando o que foi visto:
 
 -Definiu-se o que são regressões não paramétricas
-=Foi apresentada uma classe de regressões não paramétricas, o Gradient Boost Tree Decision
+<br>
+-Foi apresentada uma classe de regressões não paramétricas, o Gradient Boost Tree Decision
+<br>
 -Foi explorado os problemas dessa aborgadem na previsão de demanda usando o XGBoost
+<br>
 -Foi apresentada possíveis soluções para o problema de tendência
 
-Lembrando, foi usado o XGBoost, mas poderia ser usado o LightLGB, o KNN, Splines etc. O ponto central está no entendimento da aplicação desses modelos.
+Lembrando, foi usado o XGBoost, mas poderia ser usado o LightLGB, o KNN, Splines etc. O ponto central está no entendimento da aplicação desses modelos e suas eventuais limitações.
 
 Outro ponto a se destacar foi a importância da remoção da tendência. Apesar de ser um modelo “moderninho” de machine learning, o que ajudou ele a performar melhor foi um approach mais clássico de séries temporais. No final, não importa o modelo, aplicar uma metodologia baseada em Box & Jenkis nunca faz mal. Transformações nos dados também ajudam muito.
 
@@ -714,15 +740,15 @@ No mais, trata-se de um modelo promissor para dados estacionários com forte pad
 
 Além disso, usa-se muito variáveis com lag, afim de dar uma cara mais de “SARMA” pra ele. Novamente a ideia de usar do que há mais bem conceituada na estatística clássica, mas com modelos não lineares mais robustos.
 
-## Principais Fontes:
+## Principais Fontes: {#sec-principais-fontes}
 
 -Para regressões não paramétricas, há as notas de aula do professor Lucambio Perez da UFPR: <a href="http://leg.ufpr.br/~lucambio/Nonparam/NparamIV.html" target="_blank" rel="noopener noreferrer">Regressão Não Paramétrica</a>.
-
+<br>
 -Para uma boa introdução ao universo de séries temporais e previsão, o livro <a href="https://otexts.com/fpp3/" target="_blank" rel="noopener noreferrer">Forecasting: Principles & Practice</a>. O livro é todo construído em R, o que pode ser um problema para os pythonistas. Os autores têm excelentes publicações na área de séries temporais, que são devidamente citadas ao longo do livro, então é uma baita livro de cabeceira.
-
-Para sofrer um pouquinho com séries temporais e entender a fundo a “lógica” da modelagem de um processo estocástico, o livro <a href="https://www.amazon.com.br/Econometria-S%C3%A9ries-Temporais-Rodrigo-Silveira/dp/852211157X" target="_blank" rel="noopener noreferrer">Econometria de Séries Temporais</a>. Não recomendo como primeira leitura, mas certamente um baita livro para elevar o nível de entendimento no assunto.
-
-Para uma introdução no universo do Machine Learning, o livro <a href="https://www.amazon.com.br/M%C3%A3os-obra-aprendizado-scikit-learn-tensorflow/dp/8550803812/ref=sr_1_4?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=4OWMSIKND5IS&keywords=aprendizado+de+maquina&qid=1703042541&s=books&sprefix=aprendizado+de+maquina%2Cstripbooks%2C262&sr=1-4" target="_blank" rel="noopener noreferrer">Mãos à Obra: Aprendizado de Máquina com Scikit-Learn & TensorFlow</a>. É um livro básico, mas que é legal ter como consulta, como foi o caso na construção do texto.
-
-Para mais usos de Aprendizado de Máquina Supervisionado em séries temporais, o livro <a href="https://www.amazon.com.br/Advanced-Forecasting-Python-State-Art-Models/dp/1484271491/ref=sr_1_1?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=31X3J7B6L1YS&keywords=Advanced+Forecasting+with+Python&qid=1703042592&s=books&sprefix=advanced+forecasting+with+python%2Cstripbooks%2C515&sr=1-1&ufe=app_do%3Aamzn1.fos.4bb5663b-6f7d-4772-84fa-7c7f565ec65b" target="_blank" rel="noopener noreferrer">Advanced Forecasting with Python</a>. Não é tão advanced assim e o autor acaba pecando fortemente na exploração de alguns modelos, mas é o preço que se paga por querer ensinar +10 modelos distintos em menos de 300 pgs.
-
+<br>
+-Para sofrer um pouquinho com séries temporais e entender a fundo a “lógica” da modelagem de um processo estocástico, o livro <a href="https://www.amazon.com.br/Econometria-S%C3%A9ries-Temporais-Rodrigo-Silveira/dp/852211157X" target="_blank" rel="noopener noreferrer">Econometria de Séries Temporais</a>. Não recomendo como primeira leitura, mas certamente um baita livro para elevar o nível de entendimento no assunto.
+<br>
+-Para uma introdução no universo do Machine Learning, o livro <a href="https://www.amazon.com.br/M%C3%A3os-obra-aprendizado-scikit-learn-tensorflow/dp/8550803812/ref=sr_1_4?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=4OWMSIKND5IS&keywords=aprendizado+de+maquina&qid=1703042541&s=books&sprefix=aprendizado+de+maquina%2Cstripbooks%2C262&sr=1-4" target="_blank" rel="noopener noreferrer">Mãos à Obra: Aprendizado de Máquina com Scikit-Learn & TensorFlow</a>. É um livro básico, mas que é legal ter como consulta, como foi o caso na construção do texto.
+<br>
+-Para mais usos de Aprendizado de Máquina Supervisionado em séries temporais, o livro <a href="https://www.amazon.com.br/Advanced-Forecasting-Python-State-Art-Models/dp/1484271491/ref=sr_1_1?__mk_pt_BR=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=31X3J7B6L1YS&keywords=Advanced+Forecasting+with+Python&qid=1703042592&s=books&sprefix=advanced+forecasting+with+python%2Cstripbooks%2C515&sr=1-1&ufe=app_do%3Aamzn1.fos.4bb5663b-6f7d-4772-84fa-7c7f565ec65b" target="_blank" rel="noopener noreferrer">Advanced Forecasting with Python</a>. Não é tão advanced assim e o autor acaba pecando fortemente na exploração de alguns modelos, mas é o preço que se paga por querer ensinar +10 modelos distintos em menos de 300 pgs.
+<br>
