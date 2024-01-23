@@ -9,7 +9,7 @@
 <meta name="author" content="Vinicius Aquino">
 <meta name="dcterms.date" content="2024-01-22">
 
-<title>Gradient Boosting Aplicado à Séries Temporais</title>
+<title>Regressão Linear Aplicada à Séries Temporais</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -113,7 +113,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Gradient Boosting Aplicado à Séries Temporais</h1>
+<h1 class="title">Regressão Linear Aplicada à Séries Temporais</h1>
 </div>
 
 
@@ -144,14 +144,14 @@ window.Quarto = {
 
 <section id="sec-sumario" class="level2">
 <h2 class="anchored" data-anchor-id="sec-sumario">Sumário</h2>
-<p>  <a href="#sec-sumario" class="quarto-xref">Sumário&nbsp;1</a> <br>   <a href="#sec-resumo" class="quarto-xref">Resumo&nbsp;2</a> <br>   <a href="#sec-regressao-linear-e-series-temporais" class="quarto-xref">Regressão Linear e Séries Temporais&nbsp;3</a> <br>    <a href="#sec-modelando-tendencia" class="quarto-xref">Modelando Tendência -{&nbsp;3.1</a> <br>    <a href="#sec-sazonalidade-mensal" class="quarto-xref">Modelando Sazonalidade Mensal -{&nbsp;4</a> <br>    <strong>?@sec-validacao-cruzada</strong> <br>  <a href="#sec-variaveis-exogenas-e-consideracoes-finais" class="quarto-xref">Variáveis Exógenas e Considerações Finais&nbsp;5</a> <br></p>
+<p>  <a href="#sec-sumario" class="quarto-xref">Sumário&nbsp;1</a> <br>   <a href="#sec-resumo" class="quarto-xref">Resumo&nbsp;2</a> <br>   <a href="#sec-regressao-linear-e-series-temporais" class="quarto-xref">Regressão Linear e Séries Temporais&nbsp;3</a> <br>    <a href="#sec-modelando-tendencia" class="quarto-xref">Modelando Tendência&nbsp;3.1</a> <br>    <a href="#sec-sazonalidade-mensal" class="quarto-xref">Modelando Sazonalidade Mensal&nbsp;4</a> <br>    <a href="#sec-validacao-cruzada" class="quarto-xref">Validação Cruzada&nbsp;4.1</a> <br>  <a href="#sec-variaveis-exogenas-e-consideracoes-finais" class="quarto-xref">Variáveis Exógenas e Considerações Finais&nbsp;5</a> <br></p>
 </section>
 <section id="sec-resumo" class="level2">
 <h2 class="anchored" data-anchor-id="sec-resumo">Resumo</h2>
 <p>O texto parte do princípio que o leitor tem um conhecimento básico sobre o que é uma regressão linear. Nele apresenta como esse modelo pode ser usado no contexto de séries temporais. Na maioria absoluta das vezes o uso de regressão linear no contexto de séries temporais é dispensado, dado que modelos da classe ARMA tem a capacidade de comportar tendências (ARIMA), sazonalidade (SARMA) e variáveis exógenas (ARMAX). Os modelos da classe ARMA podem se dizer “extensões” de regressões lineares aplicadas à séries temporais, no entanto, o entendimento de como comportar regressões lineares para séries temporais é o que vai permitir o leitor a entender como funcionam regressões não paramétricas, em especial algoritimos baseados em árvores de decisão (LightGBM e XGboost, por exemplo), podem ser usadas para este tipo de problema.</p>
 <p>Para esse exercício, será o dataset beer sales, que reúne uma série histórica de vendas de cerveja. O <a href="https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv">dataset</a> junto aos pacotes usados podem ser vistos abaixo.</p>
 <p>Pacotes usados:</p>
-<div id="78b4c926" class="cell" data-execution_count="1">
+<div id="aadd4d91" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm </span>
@@ -159,18 +159,18 @@ window.Quarto = {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">'ggplot'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="56cb9966" class="cell" data-execution_count="2">
+<div id="10747766" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>warnings.simplefilter(action<span class="op">=</span><span class="st">'ignore'</span>, category<span class="op">=</span><span class="pp">FutureWarning</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Dataset:</p>
-<div id="31a64560" class="cell" data-execution_count="3">
+<div id="d65fe3d5" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(path, parse_dates<span class="op">=</span>[<span class="st">'date'</span>], index_col<span class="op">=</span>[<span class="st">'date'</span>])</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="49">
 <div>
 
 
@@ -212,7 +212,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<div id="25ee7322" class="cell" data-execution_count="4">
+<div id="cb3b98c6" class="cell" data-execution_count="4">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -242,7 +242,7 @@ window.Quarto = {
 <p><span class="math display">\[ln(y_{t}) = ln(\beta_{0}) + \beta_{1}t\]</span></p>
 <p>Interessante notar que na prática os dois modelos têm a mesma cara, mas um está olhando para a variável em nível e o outro para o logaritimo da variável.</p>
 <p>Modelando em Python:</p>
-<div id="ec5f68b1" class="cell" data-execution_count="5">
+<div id="ff0668bf" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">60</span> <span class="co"># tamanho da amostra de treinamento</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df_train <span class="op">=</span> pd.DataFrame({<span class="st">'y'</span>: df.iloc[:n, <span class="dv">0</span>],</span>
@@ -250,7 +250,7 @@ window.Quarto = {
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                        <span class="st">'b1'</span>: np.arange(<span class="dv">0</span>, n)}) <span class="co"># Dataset a ser trabalhado </span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                        </span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>df_train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display" data-execution_count="51">
 <div>
 
 
@@ -307,7 +307,7 @@ window.Quarto = {
 </div>
 </div>
 <p><br><br></p>
-<div id="2c815dc4" class="cell" data-execution_count="6">
+<div id="4c0c48b3" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Treinando Modelo 1</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>model_1 <span class="op">=</span> sm.OLS(df_train.y, df_train[[<span class="st">'b0'</span>, <span class="st">'b1'</span>]])</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>results_1 <span class="op">=</span> model_1.fit()</span>
@@ -320,7 +320,7 @@ Dep. Variable:                      y   R-squared:                       0.091
 Model:                            OLS   Adj. R-squared:                  0.076
 Method:                 Least Squares   F-statistic:                     5.831
 Date:                Mon, 22 Jan 2024   Prob (F-statistic):             0.0189
-Time:                        22:33:51   Log-Likelihood:                -412.79
+Time:                        22:51:20   Log-Likelihood:                -412.79
 No. Observations:                  60   AIC:                             829.6
 Df Residuals:                      58   BIC:                             833.8
 Df Model:                           1                                         
@@ -344,7 +344,7 @@ Notes:
 <p>O modelo estimado foi:</p>
 <p><span class="math display">\[\hat{y_t} = 1714.40 + 4.31t\]</span></p>
 <p><br><br></p>
-<div id="d9e8478a" class="cell" data-execution_count="7">
+<div id="4d308510" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Treinando Modelo 2</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>model_2 <span class="op">=</span> sm.OLS(np.log(df_train.y), df_train[[<span class="st">'b0'</span>, <span class="st">'b1'</span>]])</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results_2 <span class="op">=</span> model_2.fit()</span>
@@ -357,7 +357,7 @@ Dep. Variable:                      y   R-squared:                       0.103
 Model:                            OLS   Adj. R-squared:                  0.088
 Method:                 Least Squares   F-statistic:                     6.659
 Date:                Mon, 22 Jan 2024   Prob (F-statistic):             0.0124
-Time:                        22:33:51   Log-Likelihood:                 43.407
+Time:                        22:51:20   Log-Likelihood:                 43.407
 No. Observations:                  60   AIC:                            -82.81
 Df Residuals:                      58   BIC:                            -78.62
 Df Model:                           1                                         
@@ -381,7 +381,7 @@ Notes:
 <p>O modelo estimado foi:</p>
 <p><span class="math display">\[\hat{y_t} = 1707.01 e^{0.0023t}\]</span></p>
 <p>Fazendo previsões com os modelos:</p>
-<div id="6cd0d806" class="cell" data-execution_count="8">
+<div id="f7e8cdd2" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="dv">24</span> <span class="co"># Intervalo de predição</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>input_predict <span class="op">=</span> pd.DataFrame({<span class="st">'b0'</span>: np.ones(h), </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                              <span class="st">'b1'</span>: np.arange(n, n<span class="op">+</span>h)})</span>
@@ -391,7 +391,7 @@ Notes:
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Lembrando que o modelo enxerga o logaritimo, por isso o exp</span></span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>predict_model_2 <span class="op">=</span> np.exp(results_2.predict(input_predict[[<span class="st">'b0'</span>, <span class="st">'b1'</span>]])) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="fbe0e5e3" class="cell" data-execution_count="9">
+<div id="a9b6fdf3" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -401,7 +401,7 @@ Notes:
 </div>
 </div>
 <p><br><br></p>
-<div id="14995d5e" class="cell" data-execution_count="10">
+<div id="738329a5" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -427,7 +427,7 @@ Notes:
 <p>No caso, citando novamente o mês de julho, o valor esperado seria <span class="math inline">\(y_{t} = \beta_{0} e^{\beta_{1}t} e^{\beta_{jul}}\)</span>, dado que as demais variáveis <span class="math inline">\(x_{mes}\)</span> seriam 0 e <span class="math inline">\(e^{0} = 1\)</span>. Sendo, portanto, <span class="math inline">\(e^{\beta_{jul}}\)</span> o efeito do mês de julho na demanda.</p>
 <p>Você pode ter se perguntado: “E dezembro?”. Bom, aí entra o tal problema da multicolinearidade. Se no modelo tiver os 12 meses como variáveis dummies, então a coluna do intercepto (que vale 1) vai ser a soma de todas as colunas de sazonalidade, o que seria uma colinearidade perfeita.</p>
 <p>Modelando em Python:</p>
-<div id="890d157a" class="cell" data-execution_count="11">
+<div id="2fd03ddc" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Criando um dataframe com variáveis dummies:</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_sazo <span class="op">=</span> pd.get_dummies(</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                        pd.DataFrame({<span class="st">"mes_"</span>: [i.month <span class="cf">for</span> i <span class="kw">in</span> df.index[:n]]}),</span>
@@ -440,7 +440,7 @@ Notes:
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>df_train.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="34">
+<div class="cell-output cell-output-display" data-execution_count="57">
 <div>
 
 
@@ -556,7 +556,7 @@ Notes:
 </div>
 </div>
 </div>
-<div id="5a3844eb" class="cell" data-execution_count="12">
+<div id="0657d40f" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>model_1_sazo <span class="op">=</span> sm.OLS(df_train.y, df_train.iloc[:, <span class="dv">1</span>:])</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>results_1_sazo <span class="op">=</span> model_1_sazo.fit()</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -568,7 +568,7 @@ Dep. Variable:                      y   R-squared:                       0.963
 Model:                            OLS   Adj. R-squared:                  0.954
 Method:                 Least Squares   F-statistic:                     103.1
 Date:                Mon, 22 Jan 2024   Prob (F-statistic):           1.58e-29
-Time:                        22:33:51   Log-Likelihood:                -316.44
+Time:                        22:51:20   Log-Likelihood:                -316.44
 No. Observations:                  60   AIC:                             658.9
 Df Residuals:                      47   BIC:                             686.1
 Df Model:                          12                                         
@@ -601,7 +601,7 @@ Notes:
 </div>
 </div>
 <p>No caso, para o mês de julho, o modelo estimado foi: <span class="math display">\[\hat{y_{t}} = 1518.57 + 2.37t + 181.50 = 1700.07 + 2.37t\]</span></p>
-<div id="8282e6b8" class="cell" data-execution_count="13">
+<div id="df4c303d" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model_2_sazo <span class="op">=</span> sm.OLS(np.log(df_train.y), df_train.iloc[:, <span class="dv">1</span>:])</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>results_2_sazo <span class="op">=</span> model_2_sazo.fit()</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -613,7 +613,7 @@ Dep. Variable:                      y   R-squared:                       0.956
 Model:                            OLS   Adj. R-squared:                  0.945
 Method:                 Least Squares   F-statistic:                     85.87
 Date:                Mon, 22 Jan 2024   Prob (F-statistic):           9.41e-28
-Time:                        22:33:51   Log-Likelihood:                 134.11
+Time:                        22:51:20   Log-Likelihood:                 134.11
 No. Observations:                  60   AIC:                            -242.2
 Df Residuals:                      47   BIC:                            -215.0
 Df Model:                          12                                         
@@ -648,7 +648,7 @@ Notes:
 <p>E, novamente tomando julho como exemplo, o modelo estimado foi:</p>
 <p><span class="math display">\[\hat{y_t} = e^{\hat{\beta_0}} e^{\hat{\beta_1}t} e^{\hat{\beta_{jul}}} = 604.68 e^{0.0013t} 1.762 =  1065.45 e^{0.0013t}\]</span></p>
 <p>Fazendo previsões com os modelos:</p>
-<div id="4fb2a960" class="cell" data-execution_count="14">
+<div id="9cce0d28" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>input_predict <span class="op">=</span> pd.DataFrame({<span class="st">'b0'</span>: np.ones(h), </span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>                              <span class="st">'b1'</span>: np.arange(n, n<span class="op">+</span>h)})</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -667,7 +667,7 @@ Notes:
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Lembrando que o modelo enxerga o logaritimo, por isso o exp</span></span>
 <span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>predict_model_2_sazo <span class="op">=</span> np.exp(results_2_sazo.predict(input_predict_sazo)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b548bf69" class="cell" data-execution_count="15">
+<div id="fa25c4cf" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -676,7 +676,7 @@ Notes:
 </div>
 </div>
 </div>
-<div id="66f2b47b" class="cell" data-execution_count="16">
+<div id="ec33f47c" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -685,7 +685,7 @@ Notes:
 </div>
 </div>
 </div>
-<div id="3541c617" class="cell" data-execution_count="17">
+<div id="48225b09" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -696,16 +696,16 @@ Notes:
 </div>
 <p><br><br></p>
 <p>Nesse caso, ambos modelos apresentam um comportamento muito parecido. No caso, isso deve-se e muito a amostra escolhida. É nítido que os primeiros 5 anos apresentam uma tendência menor, o que faz que ambos modelos tenham uma tendência quase nula. O que pode-se fazer agora é modularizar o código e fazer uma validação cruzada do previsto.</p>
-<section id="sec-validacao-cruazada" class="level3">
-<h3 class="anchored" data-anchor-id="sec-validacao-cruazada">Validação Cruzada:</h3>
+<section id="sec-validacao-cruzada" class="level3">
+<h3 class="anchored" data-anchor-id="sec-validacao-cruzada">Validação Cruzada:</h3>
 <p>A idéia da validação cruzada é bem simples: treinar o modelo inúmeras vezes com amostras distintas pra ver analisar a capacidade de extrapolação.</p>
-<div id="41b7bdf2" class="cell" data-execution_count="18">
+<div id="f7760111" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cv <span class="op">=</span> SlidingWindowForecastCV(step<span class="op">=</span><span class="dv">12</span>, </span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                             h<span class="op">=</span><span class="dv">24</span>, </span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                             window_size<span class="op">=</span><span class="dv">72</span>)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="1ef76fc1" class="cell" data-execution_count="19">
+<div id="e3c94f58" class="cell" data-execution_count="19">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -719,7 +719,7 @@ Notes:
 <ul>
 <li>Dataset com os inputs:</li>
 </ul>
-<div id="6fa7fa09" class="cell" data-execution_count="20">
+<div id="481c7bcc" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df_cv <span class="op">=</span> df.copy()</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df_cv.columns <span class="op">=</span> [<span class="st">'y'</span>]</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -731,7 +731,7 @@ Notes:
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>                   dummies_sazo], axis<span class="op">=</span><span class="dv">1</span>)</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>df_cv.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div class="cell-output cell-output-display" data-execution_count="66">
 <div>
 
 
@@ -850,7 +850,7 @@ Notes:
 <ul>
 <li>Função que treina o modelo e prevê os próximos h períodos:</li>
 </ul>
-<div id="a7e3fcc2" class="cell" data-execution_count="21">
+<div id="24fcf221" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fit_predict(df_train: pd.DataFrame, df_test: pd.DataFrame, h: <span class="bu">int</span>, log: <span class="bu">bool</span>):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> sm.OLS(np.log(df_train.iloc[:, <span class="dv">0</span>]) <span class="cf">if</span> log <span class="cf">else</span> df_train.iloc[:, <span class="dv">0</span>], </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                   df_train.iloc[:, <span class="dv">1</span>:])</span>
@@ -862,7 +862,7 @@ Notes:
 <ul>
 <li>Validação cruzada:</li>
 </ul>
-<div id="5570ec50" class="cell" data-execution_count="22">
+<div id="fbc5be8c" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cv_generator <span class="op">=</span> cv.split(df)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>log_win <span class="op">=</span> np.zeros(n, dtype<span class="op">=</span><span class="bu">float</span>)</span>
@@ -883,7 +883,7 @@ Notes:
 <pre><code>Modelo log performou melhor em 70.0% das vezes</code></pre>
 </div>
 </div>
-<div id="5b66eb28" class="cell" data-execution_count="23">
+<div id="3d25a817" class="cell" data-execution_count="23">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">

@@ -1,9 +1,8 @@
 ---
-title: "Gradient Boosting Aplicado à Séries Temporais"
+title: "Regressão Linear Aplicada à Séries Temporais"
 format: html
 author: "Vinicius Aquino"
 code-block-border-left: true
-theme: flatly
 date: now
 ---
 ## Sumário {#sec-sumario}
@@ -11,9 +10,9 @@ date: now
 &ensp;  [Sumário -@sec-sumario] <br>
 &ensp;  [Resumo -@sec-resumo] <br>
 &ensp;  [Regressão Linear e Séries Temporais -@sec-regressao-linear-e-series-temporais] <br>
-&ensp;&ensp; [Modelando Tendência -{@sec-modelando-tendencia}] <br>
-&ensp;&ensp; [Modelando Sazonalidade Mensal -{@sec-sazonalidade-mensal}] <br>
-&ensp;&ensp; [Validação Cruzada -{@sec-validacao-cruzada}] <br>
+&ensp;&ensp; [Modelando Tendência -@sec-modelando-tendencia}] <br>
+&ensp;&ensp; [Modelando Sazonalidade Mensal -@sec-sazonalidade-mensal}] <br>
+&ensp;&ensp; [Validação Cruzada -@sec-validacao-cruzada}] <br>
 &ensp;[Variáveis Exógenas e Considerações Finais -@sec-variaveis-exogenas-e-consideracoes-finais] <br>
 
 ## Resumo {#sec-resumo}
@@ -366,7 +365,7 @@ plt.show()
 
 Nesse caso, ambos modelos apresentam um comportamento muito parecido. No caso, isso deve-se e muito a amostra escolhida. É nítido que os primeiros 5 anos apresentam uma tendência menor, o que faz que ambos modelos tenham uma tendência quase nula. O que pode-se fazer agora é modularizar o código e fazer uma validação cruzada do previsto. 
 
-### Validação Cruzada: {#sec-validacao-cruazada}
+### Validação Cruzada: {#sec-validacao-cruzada}
 
 A idéia da validação cruzada é bem simples: treinar o modelo inúmeras vezes com amostras distintas pra ver analisar a capacidade de extrapolação.
 
