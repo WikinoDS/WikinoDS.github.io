@@ -1,15 +1,26 @@
 ---
-title: "Regressão Linear Aplicada à Séries Temporais com Python"
+title: "Gradient Boosting Aplicado à Séries Temporais"
 format: html
-author: Vinicius Aquino
+author: "Vinicius Aquino"
+code-block-border-left: true
+theme: flatly
 date: now
 ---
+## Sumário {#sec-sumario}
 
-# Resumo
+&ensp;  [Sumário -@sec-sumario] <br>
+&ensp;  [Resumo -@sec-resumo] <br>
+&ensp;  [Regressão Linear e Séries Temporais -@sec-regressao-linear-e-series-temporais] <br>
+&ensp;&ensp; [Modelando Tendência -{@sec-modelando-tendencia}] <br>
+&ensp;&ensp; [Modelando Sazonalidade Mensal -{@sec-sazonalidade-mensal}] <br>
+&ensp;&ensp; [Validação Cruzada -{@sec-validacao-cruzada}] <br>
+&ensp;[Variáveis Exógenas e Considerações Finais -@sec-variaveis-exogenas-e-consideracoes-finais] <br>
+
+## Resumo {#sec-resumo}
 
 O texto parte do princípio que o leitor tem um conhecimento básico sobre o que é uma regressão linear. Nele apresenta como esse modelo pode ser usado no contexto de séries temporais. Na maioria absoluta das vezes o uso de regressão linear no contexto de séries temporais é dispensado, dado que modelos da classe ARMA tem a capacidade de comportar tendências (ARIMA), sazonalidade (SARMA) e variáveis exógenas (ARMAX). Os modelos da classe ARMA podem se dizer "extensões" de regressões lineares aplicadas à séries temporais, no entanto, o entendimento de como comportar regressões lineares para séries temporais é o que vai permitir o leitor a entender como funcionam regressões não paramétricas, em especial algoritimos baseados em árvores de decisão (LightGBM e XGboost, por exemplo), podem ser usadas para este tipo de problema. 
 
-Para esse exercício, usar-se-á o dataset beer sales, que reúne uma série histórica de vendas de cerveja. O dataset junto aos pacotes usados podem ser vistos abaixo.
+Para esse exercício, será o dataset beer sales, que reúne uma série histórica de vendas de cerveja. O <a href="https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv">dataset</a> junto aos pacotes usados podem ser vistos abaixo.
 
 Pacotes usados:
 
@@ -22,9 +33,16 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 ```
 
+```{python}
+#| echo: True
+#| 
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
+path = "https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv"
+```
 Dataset:
 ```{python}
-path = "https://raw.githubusercontent.com/flo7up/relataly_data/main/alcohol_sales/BeerWineLiquor.csv"
 df = pd.read_csv(path, parse_dates=['date'], index_col=['date'])
 
 df.head()
@@ -42,15 +60,15 @@ plt.show()
 ```
 
 
-# Regressão Linear e Séries Temporais
+## Regressão Linear e Séries Temporais {#sec-regressao-linear-e-series-temporais}
 
 <p>Uma observação sempre pertinente sobre Regressão Linear é que existe essencialmente dois modelos diferentes e eventualmente coincidentes: existe a regressão linear como modelo matemático que minimiza quadrados ordinários e existe a regressão linear como modelo probabilístico que produz estimadores não enviesados de menor variância possível (BLUE). Isso é, existe a regressão linear da álgebra linera e a regressão linear da estatística. No escopo deste texto, aprendizado de máquina supervisionado, será visto o primeiro modelo. Isso é, a nossa regressão linear vai ser pensada como um algoritimo que encontra uma estimativa para um modelo com parâmetros lineares entre si, minimizando o quadrado dos resíduos em treino sem fazer suposições a cerca do comportamento dos resíduos.
 
-No contexto de Séries Temporais, o que pode-se fazer com regressão linear é estimar modelos "mecanisticos" para sua variável aleatória. O "mecanístico" vem lá da Física Mecânica mesmo. Estimar uma função de posição ao longo do tempo para a sua variável e adicionar covariáveis para explicar isto. O desafio vai ser especificar essa função de forma que capte melhor o movimento da variável. Um ponto interessante é que como está se estimando a "velocidade" de crescimento, é interessante não usar um dataset tão grande, para que estime velocidades "locais".
+No contexto de Séries Temporais, o que pode-se fazer com regressão linear é estimar modelos "mecanisticos" para sua variável aleatória $y_t$. O "mecanístico" vem lá da Física Mecânica mesmo. Estimar uma função de posição ao longo do tempo para a sua variável e adicionar covariáveis para explicar isto. O desafio vai ser especificar essa função de forma que capte melhor o movimento da variável. Um ponto interessante é que como está se estimando a "velocidade" de crescimento, é interessante não usar um dataset tão grande, para que estime velocidades "locais".
 
 Além disso, é interessante pontuar que se modela separadamente (no memso modelo, mas com "fatores" próprios para cada) os diferentes componentes de uma série temporal. No caso, para o dataset a ser usado, há componentes de <i>tendência</i> e  <i>sazonalidade mensal</i> a serem controlados e que serão adicionados por partes no modelo. A idéia é controlar esses fatores até que os erros do modelo sejam meramente ao acaso, ou, como é visto nos modelos ARIMA, sejam "ruídos brancos".
 
-## Modelando Tendência:
+### Modelando Tendência: {#sec-modelando-tendencia}
 
 Para o nosso dataset, vamos sugerir inicialmente dois modelos mais simples de tendência:
 
@@ -148,10 +166,10 @@ plt.show()
 
 f, ax = plt.subplots(figsize=(8, 5))
 
-year_predict_in_2 = np.exp(results_2.fittedvalues).resample('1Y').mean()
+year_predict_in_2 = np.exp(results_2.fittedvalues).resample('1YE').mean()
 year_predict_in_2.index = year_predict_in_2.index.year
 
-year_predict_in_1 = results_1.fittedvalues.resample('1Y').mean()
+year_predict_in_1 = results_1.fittedvalues.resample('1YE').mean()
 year_predict_in_1.index = year_predict_in_1.index.year
 
 ax.plot(year_predict_in_2, label='exp model', color='g')
@@ -173,25 +191,27 @@ plt.show()
 No caso, os dois modelos, de certa forma, pegaram bem a tendência da série. A questão está nos padrões dos erros relacionados a sazonalidade mensal.
 
 
-## Sazonalidade Mensal
+## Sazonalidade Mensal {#sec-sazonalidade-mensal}
 
 Apesar da modelagem da tendência ter sido bem sucedida, é vizualmente nítido que há um forte padrão nos erros. Todo mês de janeiro, a previsão fica abaixo, por exemplo. O ponto em questão agora é saber como se dá a estrutura desse erro. Na prática, o que será feito é estimar o "empurrãozinho" que cada mês dá nessa reta estimada. Dá mesma forma que a tendência pode ser linear ou exponencial, a sazonalidade pode ser aditiva ou multiplicativa. No caso da aditiva, é, todo mês, adicionado um fator ao nível da série (negativo ou positivo). No caso da multiplicativa, todo mês o nível da série é multiplicado por um fator diferente. 
 
 No caso, o Modelo 1 terá sazonalidade aditiva. O novo modelo 1 pode ser visto como:
 
-$$y_{t} = \beta_{0} + \beta_{1}t + \beta_{jan} x_{jan} + \beta_{fev} x_{fev} + ... + \beta_{dez} x_{dez}$$
+$$y_{t} = \beta_{0} + \beta_{1}t + \beta_{jan} x_{jan} + \beta_{fev} x_{fev} + ... + \beta_{nov} x_{nov}$$
 
 Onde $x_{jan}$ vale 1 se é o mês de janeiro, 0 caso contrário. As demais variáveis se comportam do mesmo jeito. Isso é, para o mês de julho, por exemplo, o valor esperado de $y_{t}$ é dado por: $\hat{y_{t}} = \beta_{0} + \beta_{1}t + \beta_{jul}$.
 
 Para o Modelo 2 será usada a sazonalidade multiplicativa. Sendo o modelo 2:
 
-$$y_{t} = \beta_{0} e^{\beta_{1}t} e^{\beta_{jan}x_{jan}} e^{\beta_{fev} x_{fev}} ... e^{\beta_{dez} x_{dez}}$$
+$$y_{t} = \beta_{0} e^{\beta_{1}t} e^{\beta_{jan}x_{jan}} e^{\beta_{fev} x_{fev}} ... e^{\beta_{nov} x_{nov}}$$
 
 Linearizando o modelo:
 
-$$ln(y_{t}) = ln(\beta_{0}) + \beta_{1}t +\beta_{jan} x_{jan} + \beta_{fev} x_{fev} + ... + \beta_{dez} x_{dez}$$
+$$ln(y_{t}) = ln(\beta_{0}) + \beta_{1}t +\beta_{jan} x_{jan} + \beta_{fev} x_{fev} + ... + \beta_{nov} x_{nov}$$
 
 No caso, citando novamente o mês de julho, o valor esperado seria $y_{t} = \beta_{0} e^{\beta_{1}t} e^{\beta_{jul}}$, dado que as demais variáveis $x_{mes}$ seriam 0 e $e^{0} = 1$. Sendo, portanto, $e^{\beta_{jul}}$ o efeito do mês de julho na demanda.
+
+Você pode ter se perguntado: "E dezembro?". Bom, aí entra o tal problema da multicolinearidade. Se no modelo tiver os 12 meses como variáveis dummies, então a coluna do intercepto (que vale 1) vai ser a soma de todas as colunas de sazonalidade, o que seria uma colinearidade perfeita.
 
 Modelando em Python:
 
@@ -200,11 +220,11 @@ Modelando em Python:
 df_sazo = pd.get_dummies(
                         pd.DataFrame({"mes_": [i.month for i in df.index[:n]]}),
                         columns=['mes_'],
-                        prefix="mes_"
+                        prefix="mes"
                          )                        
 
 df_train = pd.concat([df_train.reset_index(drop=True), 
-                      df_sazo], axis=1).astype(int)
+                      df_sazo], axis=1).astype(int).drop(labels=['mes_12'], axis=1)
 
 
 df_train.head()
@@ -242,8 +262,8 @@ input_predict = pd.DataFrame({'b0': np.ones(h),
 df_sazo_predict = pd.get_dummies(
                                 pd.DataFrame({"mes_": [i.month for i in df.index[n:n+h]]}),
                                 columns=['mes_'],
-                                prefix="mes_"
-                                ).astype(int)     
+                                prefix="mes"
+                                ).astype(int).drop(labels=['mes_12'], axis=1)     
 
 input_predict_sazo = pd.concat([input_predict,
                                 df_sazo_predict],
@@ -283,11 +303,11 @@ ax.scatter(df.index[n:n+h].year, df.iloc[n:n+h, 0], color='r')
 # Model 1
 fitted = results_1_sazo.fittedvalues
 fitted.index = df.index[:n]
-fitted = fitted.resample('1Y').mean()
+fitted = fitted.resample('1YE').mean()
 
 predict = predict_model_1_sazo
 predict.index = df.index[n: n+h]
-predict = predict.resample('1Y').mean()
+predict = predict.resample('1YE').mean()
 
 ax.plot(fitted.index.year, fitted, label='linear model', color='b')
 ax.plot([fitted.index.year[-1]]+predict.index.year.to_list(), [fitted[-1]]+predict.to_list(), color='b', ls='--')
@@ -295,11 +315,11 @@ ax.plot([fitted.index.year[-1]]+predict.index.year.to_list(), [fitted[-1]]+predi
 # Model 2
 fitted = np.exp(results_2_sazo.fittedvalues)
 fitted.index = df.index[:n]
-fitted = fitted.resample('1Y').mean()
+fitted = fitted.resample('1YE').mean()
 
 predict = predict_model_2_sazo
 predict.index = df.index[n: n+h]
-predict = predict.resample('1Y').mean()
+predict = predict.resample('1YE').mean()
 
 ax.plot(fitted.index.year, fitted, label='exp model', color='g')
 ax.plot([fitted.index.year[-1]]+predict.index.year.to_list(), [fitted[-1]]+predict.to_list(), color='g', ls='--')
@@ -338,15 +358,17 @@ predict.index = df.index[n: n+h].year
 for i in predict.index.unique():
     ax.plot(np.arange(1, 13), predict.loc[i], '--',  color='g')
 
-
-plt.legend()
 plt.title("Current vs Predict (Sazonality Analysis)")
 plt.show()
 ```
 
 <br></br>
 
-Nesse caso, ambos modelos apresentam um comportamento muito parecido. No caso, isso deve-se e muito a amostra escolhida. É nítido que os primeiros 5 anos apresentam uma tendência menor, o que faz que ambos modelos tenham uma tendência quase nula. O que pode-se fazer agora é modularizar o código e fazer uma validação cruzada do previsto. A idéia da validação cruzada é bem simples: treinar o modelo inúmeras vezes com amostras distintas pra ver analisar a capacidade de extrapolação.
+Nesse caso, ambos modelos apresentam um comportamento muito parecido. No caso, isso deve-se e muito a amostra escolhida. É nítido que os primeiros 5 anos apresentam uma tendência menor, o que faz que ambos modelos tenham uma tendência quase nula. O que pode-se fazer agora é modularizar o código e fazer uma validação cruzada do previsto. 
+
+### Validação Cruzada: {#sec-validacao-cruazada}
+
+A idéia da validação cruzada é bem simples: treinar o modelo inúmeras vezes com amostras distintas pra ver analisar a capacidade de extrapolação.
 
 ```{python}
 cv = SlidingWindowForecastCV(step=12, 
@@ -377,7 +399,7 @@ plt.show()
 
 <br></br>
 
-Nesse caso, serão treinados 20x cada modelo com amostras diferentes (mas não independentes, dado que uma observação aparece 5x em cada amostra) e será avaliado o desempenho de cada um prevendo dois anos seguintes. Criando uma função que prevê os dois anos seguintes:
+Nesse caso, serão treinados 20x cada modelo com amostras diferentes (mas não tãããão independentes, dado que uma observação aparece 5x em cada amostra) e será avaliado o desempenho de cada um prevendo dois anos seguintes. Criando uma função que prevê os dois anos seguintes:
 
 - Dataset com os inputs:
 
@@ -388,7 +410,7 @@ df_cv.columns = ['y']
 df_cv['b0'] = 1
 df_cv['b1'] = np.arange(len(df_cv))
 
-dummies_sazo = pd.get_dummies(pd.DataFrame({"mes": df_cv.index.month}), columns=["mes"]).astype(int)
+dummies_sazo = pd.get_dummies(pd.DataFrame({"mes": df_cv.index.month}), columns=["mes"]).astype(int).drop(labels=['mes_12'], axis=1)
 df_cv = pd.concat([df_cv.reset_index(drop=True), 
                    dummies_sazo], axis=1)
 
@@ -461,7 +483,7 @@ plt.show()
 
 Nesse caso, o modelo que prevê o logaritimo, e tem por trás suposição de um crescimento exponencial e sazonalidade multiplicativa, performa acima e, pode-se dizer, de forma satisfatória. 
 
-## Variáveis Exógenas e Considerações Finais
+## Variáveis Exógenas e Considerações Finais {#sec-variaveis-exogenas-e-consideracoes-finais}
 
 <p>Além de variáveis relacionadas ao mês e ano, poderia ter sido utilizado variáveis externa a demanda total, como preços e promoções. Uma ressalva quanto a variáveis exógenas em modelos de séries temporais é a incerteza da sua variável no momento de predição. Você sabe exatamente qual foi a temperatura média, quantos foram os clientes e quais promoções foram feitas no passado, mas provavelmente não sabe como serão no futuro e, desta forma, não é aconselhado usá-los. Isso porque em treino você usou o valor real e em produção vai usar a PREVISÃO do valor, contendo uma incerteza que vai produzir uma performance aquém do esperado. Pode-se usar variáveis com componentes de incerteza, contanto que se faça um estudo prévio para mensurar a performance do modelo trabalhando com a incerteza, sem incorrer em <i>data lakage</i>.
 
